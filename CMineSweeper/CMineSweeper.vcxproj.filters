@@ -24,6 +24,9 @@
     <ClCompile Include="CMineSweeper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Cell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Globals.h">
@@ -48,6 +51,12 @@
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="UI.h">
+      <Filter>Header Files\MineSweeper</Filter>
+    </ClInclude>
+    <ClInclude Include="Cell.h">
+      <Filter>Header Files\MineSweeper</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
       <Filter>Header Files\MineSweeper</Filter>
     </ClInclude>
   </ItemGroup>
