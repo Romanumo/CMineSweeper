@@ -11,7 +11,7 @@ namespace Engine
 		Text(int x, int y, int w, int h,
 			const std::string& text, 
 			SDL_Color color = { 0, 0,0,255 },
-			int fontSize = 30) : 
+			int fontSize = 60) : 
 			destRect{x, y, w, h}, textColor(color)
 		{
 			font = TTF_OpenFont(Config::FONT.c_str(), fontSize);
@@ -48,7 +48,7 @@ namespace Engine
 			const int heightDifference = h - textSurface->h;
 			const int topOffset = heightDifference / 2;
 
-			textPos = { x + leftOffset, y + topOffset, w, h };
+			textPos = { x + leftOffset, y + topOffset, w-widthDifference, h-heightDifference };
 		}
 
 		void Render(SDL_Surface* surface)

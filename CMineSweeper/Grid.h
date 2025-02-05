@@ -2,6 +2,7 @@
 #include <vector>
 #include "Globals.h"
 #include "Cell.h"
+#include "Random.h"
 
 class Grid
 {
@@ -20,6 +21,22 @@ public:
 					y + spacing * row,
 					CELL_SIZE, CELL_SIZE, row + 1, col + 1
 				);
+			}
+		}
+
+		PlaceBombs();
+	}
+
+	void PlaceBombs()
+	{
+		int bombsToPlace = Config::BOMB_COUNT;
+		while (bombsToPlace > 0)
+		{
+			const size_t randomIndex = 
+				Engine::Random::Int(0, children.size()-1);
+			if (children[randomIndex].PlaceBomb())
+			{
+				--bombsToPlace;
 			}
 		}
 	}

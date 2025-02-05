@@ -54,8 +54,6 @@ int main(int argc, char** argv)
         window.UpdateFrame();
     }
 
-    IMG_Quit();
-    TTF_Quit();
     SDL_Quit();
     return 0;
 }

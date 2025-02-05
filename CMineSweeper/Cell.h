@@ -1,5 +1,7 @@
 #pragma once
 #include "Button.h"
+#include "Image.h"
+#include "Text.h"
 
 class Cell : public Engine::Button
 {
@@ -10,6 +12,11 @@ public:
 	void Render(SDL_Surface* surface) override;
 
 	void HandleLeftClick() override;
+
+	bool PlaceBomb();
+
+	[[nodiscard]]
+	bool HasBomb() const { return hasBomb; }
 
 	[[nodiscard]]
 	int GetRow() const { return row; }
@@ -23,7 +30,15 @@ private:
 
 	void ClearCell();
 	bool isCleared = false;
+	bool hasBomb = false;
 
 	void ReportEvent(uint32_t eventType);
-};
+	bool IsAdjacent(Cell* cell) const;
 
+	void HandlePlacedBomb(const SDL_UserEvent& event);
+	void HandleClearedCell(const SDL_UserEvent& event);
+	int adjacentBombs = 0;
+
+	Engine::Image bombImage;
+	Engine::Text text;
+};
