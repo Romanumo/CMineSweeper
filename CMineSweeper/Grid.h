@@ -27,20 +27,6 @@ public:
 		PlaceBombs();
 	}
 
-	void PlaceBombs()
-	{
-		int bombsToPlace = Config::BOMB_COUNT;
-		while (bombsToPlace > 0)
-		{
-			const size_t randomIndex = 
-				Engine::Random::Int(0, children.size()-1);
-			if (children[randomIndex].PlaceBomb())
-			{
-				--bombsToPlace;
-			}
-		}
-	}
-
 	void Render(SDL_Surface* surface)
 	{
 		for (auto& child : children)
@@ -51,6 +37,20 @@ public:
 
 	void HandleEvent(const SDL_Event& event)
 	{
+		if (event.type == UserEvents::CELL_CLEARED)
+		{
+			HandleCellCleared(event.user);
+		}
+		if (event.type == UserEvents::NEW_GAME)
+		{
+			for (auto& child : children)
+			{
+				child.Reset();
+			}
+
+			PlaceBombs();
+		}
+
 		for (auto& child : children)
 		{
 			child.HandleEvent(event);
@@ -59,4 +59,41 @@ public:
 
 private:
 	std::vector<Cell> children;
+	int cellsToClear = 0;
+
+	void PlaceBombs()
+	{
+		int bombsToPlace = Config::BOMB_COUNT;
+		cellsToClear =
+			Config::GRID_COLUMNS * Config::GRID_ROWS - Config::BOMB_COUNT;
+
+		while (bombsToPlace > 0)
+		{
+			const size_t randomIndex =
+				Engine::Random::Int(0, children.size() - 1);
+			if (children[randomIndex].PlaceBomb())
+			{
+				--bombsToPlace;
+			}
+		}
+	}
+
+	void HandleCellCleared(const SDL_UserEvent& event)
+	{
+		auto* cell = static_cast<Cell*>(event.data1);
+		if (cell->HasBomb())
+		{
+			SDL_Event gameLost{UserEvents::GAME_LOST};
+			SDL_PushEvent(&gameLost);
+		}
+		else
+		{
+			--cellsToClear;
+			if (cellsToClear == 0)
+			{
+				SDL_Event gameWon{ UserEvents::GAME_WON };
+				SDL_PushEvent(&gameWon);
+			}
+		}
+	}
 };

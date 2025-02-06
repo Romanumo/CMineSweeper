@@ -59,5 +59,11 @@
     <ClInclude Include="Grid.h">
       <Filter>Header Files\MineSweeper</Filter>
     </ClInclude>
+    <ClInclude Include="NewGameButton.h">
+      <Filter>Header Files\MineSweeper</Filter>
+    </ClInclude>
+    <ClInclude Include="FlagCounter.h">
+      <Filter>Header Files\MineSweeper</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

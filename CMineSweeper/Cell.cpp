@@ -6,7 +6,8 @@
 Cell::Cell(int x, int y, int w, int h, int row, int col) :
 	Button{ x, y, w, h }, row(row), col(col),
 	bombImage{x, y, w, h, Config::BOMB_IMAGE},
-	text{x, y, w, h, 
+	flagImage{ x, y, w, h, Config::FLAG_IMAGE },
+	text{x, y, w, h,
 	std::to_string(adjacentBombs),
 	Config::TEXT_COLORS[adjacentBombs]} { };
 
@@ -20,6 +21,18 @@ void Cell::HandleEvent(const SDL_Event& event)
 	{
 		HandlePlacedBomb(event.user);
 	}
+	else if(event.type == UserEvents::GAME_LOST || 
+		event.type == UserEvents::GAME_WON)
+	{
+		if (HasBomb())
+		{
+			SetColor((event.type == UserEvents::GAME_LOST) ? 
+					Config::BUTTON_FAILURE_COLOR : Config::BUTTON_SUCCESS_COLOR);
+			isCleared = true;
+		}
+
+		SetEnabled(false);
+	}
 
 	Button::HandleEvent(event);
 }
@@ -30,6 +43,10 @@ void Cell::Render(SDL_Surface* surface)
 	if (isCleared && hasBomb)
 	{
 		bombImage.Render(surface);
+	}
+	else if (hasFlag)
+	{
+		flagImage.Render(surface);
 	}
 	else if (isCleared && adjacentBombs > 0)
 	{
@@ -50,6 +67,7 @@ void Cell::Render(SDL_Surface* surface)
 void Cell::ClearCell()
 {
 	if (isCleared) return;
+	if (hasFlag) return;
 
 	isCleared = true;
 	SetEnabled(false);
@@ -60,6 +78,13 @@ void Cell::ClearCell()
 void Cell::HandleLeftClick()
 {
 	ClearCell();
+}
+
+void Cell::HandleRightClick()
+{
+	hasFlag = !hasFlag;
+
+	ReportEvent((hasFlag) ? UserEvents::FLAG_PLACED : UserEvents::FLAG_CLEARED);
 }
 
 void Cell::ReportEvent(uint32_t eventType)
@@ -107,4 +132,14 @@ void Cell::HandleClearedCell(const SDL_UserEvent& event)
 	{
 		ClearCell();
 	}
+}
+
+void Cell::Reset()
+{
+	isCleared = false;
+	hasBomb = false;
+	hasFlag = false;
+	adjacentBombs = 0;
+	SetEnabled(true);
+	SetColor(Config::BUTTON_COLOR);
 }

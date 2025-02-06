@@ -139,9 +139,11 @@
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="Cell.h" />
+    <ClInclude Include="FlagCounter.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Image.h" />
+    <ClInclude Include="NewGameButton.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="Text.h" />
