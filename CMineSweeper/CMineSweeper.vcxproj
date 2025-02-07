@@ -144,7 +144,6 @@
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Image.h" />
-    <ClInclude Include="LayoutComponent.h" />
     <ClInclude Include="NewGameButton.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Rectangle.h" />

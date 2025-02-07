@@ -39,17 +39,14 @@ namespace Engine
 
 			textSurface = TTF_RenderUTF8_Blended(font, text.c_str(), color);
 
-			auto [x, y, w, h] = container;
+			UpdateTextPosition();
+		}
 
-			//Horizontal Centering
-			const int widthDifference = w - textSurface->w;
-			const int leftOffset = widthDifference / 2;
-
-			//Vertical Centering
-			const int heightDifference = h - textSurface->h;
-			const int topOffset = heightDifference / 2;
-
-			textPos = { x + leftOffset, y + topOffset, w-widthDifference, h-heightDifference };
+		void SetPosition(int x, int y) override
+		{
+			Component::SetPosition(x, y);
+			
+			UpdateTextPosition();
 		}
 
 		void Render(SDL_Surface* surface) override
@@ -68,5 +65,20 @@ namespace Engine
 		TTF_Font* font = nullptr;
 		SDL_Rect textPos{ 0,0,0,0 };
 		SDL_Color textColor{ 0,0,0,255 };
+
+		void UpdateTextPosition()
+		{
+			auto [x, y, w, h] = *GetRect();
+
+			//Horizontal Centering
+			const int widthDifference = w - textSurface->w;
+			const int leftOffset = widthDifference / 2;
+
+			//Vertical Centering
+			const int heightDifference = h - textSurface->h;
+			const int topOffset = heightDifference / 2;
+
+			textPos = { x + leftOffset, y + topOffset, w - widthDifference, h - heightDifference };
+		}
 	};
 }

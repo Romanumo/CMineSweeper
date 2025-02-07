@@ -23,7 +23,7 @@ namespace Engine
 
 		void Render(SDL_Surface* destSurface) override
 		{
-			SDL_BlitScaled(imageSurface, nullptr, destSurface, &container);
+			SDL_BlitScaled(imageSurface, nullptr, destSurface, GetRect());
 		}
 
 		~Image()

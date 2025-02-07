@@ -3,43 +3,67 @@
 #include <iostream>
 #include <memory>
 #include "Component.h"
-#include "LayoutComponent.h"
 
 namespace Engine
 {
-	class Row : Component
+	class Row : public Component
 	{
 	public:
-		Row(int x, int y, int w, int h, int padding) :
-			Component(x, y, w, h), 
-			percentilePadding((static_cast<float>(padding)/h)*100.0f)
+		Row(int padding, int x, int y, std::vector<Component*> components) :
+			Component(x,y,0,0), padding(padding)
 		{
-			children.reserve(Config::MAX_LAYOUT_COUNT);
+			for (Component* component : components)
+			{
+				AddComponent(*component);
+			}
 		}
 
-		void AddComponent(Component& object, int percentage)
+		void AddComponent(Component& child)
 		{
-			if (overallPercentage + percentage > 100)
-			{
-				std::cout << "Column exceeds combined components size" << std::endl;
-				return;
-			}
+			if (!child.SetAsChildOf(this)) return;
 
-			children.push_back(LayoutComponent(object, percentage));
-			overallPercentage += percentage;
+			SDL_Rect* objRect = child.GetRect();
+			SDL_Rect* myRect = GetRect();
+			objRect->x = myRect->w + myRect->x;
+			objRect->y = myRect->y + padding;
+
+			StretchContainer(objRect, myRect);
+		}
+
+		void StretchContainer(const SDL_Rect* objRect, SDL_Rect* myRect)
+		{
+			myRect->w += objRect->w + padding;
+			if (objRect->h > myRect->h)
+			{
+				myRect->h = objRect->h;
+			}
 		}
 
 		void Render(SDL_Surface* surface) override
 		{
-			for (LayoutComponent component : children)
+			for (Component* component : children)
 			{
-				component.GetComponent()->Render(surface);
+				component->Render(surface);
+			}
+		}
+
+		Row() = default;
+
+	protected:
+		void HandleChildPosition() override
+		{
+			if (children.size() < 1) return;
+			SDL_Rect* rect = GetRect();
+			int xLength = 0;
+
+			for (Component* component : children)
+			{
+				component->SetPosition(rect->x + xLength, rect->y);
+				xLength += component->GetRect()->w + padding;
 			}
 		}
 
 	private:
-		std::vector<LayoutComponent> children;
-		int percentilePadding = 0;
-		int overallPercentage = 0;
+		int padding = 0;
 	};
 }

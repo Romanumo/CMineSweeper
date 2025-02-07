@@ -74,7 +74,7 @@ namespace Config
 	inline const std::string FLAG_IMAGE = "Assets/Flag.png";
 
 	//Layout
-	inline const int MAX_LAYOUT_COUNT = 20;
+	inline const int MAX_CHILDREN = 20;
 }
 
 namespace Utils

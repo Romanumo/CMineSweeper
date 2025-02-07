@@ -28,7 +28,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Cell.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files\MineSweeper</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -67,9 +67,6 @@
     </ClInclude>
     <ClInclude Include="Component.h">
       <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="LayoutComponent.h">
-      <Filter>Header Files\Engine\Layout</Filter>
     </ClInclude>
     <ClInclude Include="Row.h">
       <Filter>Header Files\Engine\Layout</Filter>
