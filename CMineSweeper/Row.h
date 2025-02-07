@@ -4,15 +4,15 @@
 #include <memory>
 #include "Component.h"
 #include "LayoutComponent.h"
-#include "Globals.h"
 
 namespace Engine
 {
-	class Column : Component
+	class Row : Component
 	{
 	public:
-		Column(int x, int y, int w, int h) :
-			Component(x, y, w, h)
+		Row(int x, int y, int w, int h, int padding) :
+			Component(x, y, w, h), 
+			percentilePadding((static_cast<float>(padding)/h)*100.0f)
 		{
 			children.reserve(Config::MAX_LAYOUT_COUNT);
 		}
@@ -39,6 +39,7 @@ namespace Engine
 
 	private:
 		std::vector<LayoutComponent> children;
+		int percentilePadding = 0;
 		int overallPercentage = 0;
 	};
 }

@@ -32,9 +32,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Globals.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Window.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
@@ -74,8 +71,11 @@
     <ClInclude Include="LayoutComponent.h">
       <Filter>Header Files\Engine\Layout</Filter>
     </ClInclude>
-    <ClInclude Include="Column.h">
+    <ClInclude Include="Row.h">
       <Filter>Header Files\Engine\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals.h">
+      <Filter>Header Files\Engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

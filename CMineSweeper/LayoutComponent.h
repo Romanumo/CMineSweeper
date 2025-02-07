@@ -2,6 +2,7 @@
 #include <functional>
 #include "Component.h"
 
+//TODO: Can be used for dynamic, percentage based layout arrangement
 namespace Engine
 {
 	/*Special Wrapper class for layout classes
