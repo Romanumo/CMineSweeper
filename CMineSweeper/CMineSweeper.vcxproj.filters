@@ -19,6 +19,9 @@
     <Filter Include="Header Files\MineSweeper">
       <UniqueIdentifier>{095fb20c-6afe-48e7-9e4d-5c228d09ff26}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Engine\Layout">
+      <UniqueIdentifier>{9397e695-f87a-450d-b5e7-93ef6ba36a3c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CMineSweeper.cpp">
@@ -65,8 +68,14 @@
     <ClInclude Include="FlagCounter.h">
       <Filter>Header Files\MineSweeper</Filter>
     </ClInclude>
-    <ClInclude Include="Column.h">
+    <ClInclude Include="Component.h">
       <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="LayoutComponent.h">
+      <Filter>Header Files\Engine\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="Column.h">
+      <Filter>Header Files\Engine\Layout</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

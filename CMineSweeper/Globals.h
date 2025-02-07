@@ -73,6 +73,8 @@ namespace Config
 	inline const std::string BOMB_IMAGE = "Assets/Bomb.png";
 	inline const std::string FLAG_IMAGE = "Assets/Flag.png";
 
+	//Layout
+	inline const int MAX_LAYOUT_COUNT = 20;
 }
 
 namespace Utils

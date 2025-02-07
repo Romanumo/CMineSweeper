@@ -1,17 +1,18 @@
 #pragma once
 #include <SDL_image.h>
 #include <string>
+#include "Component.h"
 
 #include "Globals.h"
 
 namespace Engine
 {
-	class Image
+	class Image : public Component
 	{
 	public:
 		Image(int x, int y, int w, int h,
-			const std::string& file, int padding = 12) :
-			destRect{ x + padding / 2, y + padding / 2, w - padding, h - padding }
+			const std::string& file) :
+			Component{ x, y, w, h }
 		{
 			imageSurface = IMG_Load(file.c_str());
 
@@ -20,9 +21,9 @@ namespace Engine
 			#endif // SHOW_DEBUG_HELPERS
 		}
 
-		void Render(SDL_Surface* destSurface)
+		void Render(SDL_Surface* destSurface) override
 		{
-			SDL_BlitScaled(imageSurface, nullptr, destSurface, &destRect);
+			SDL_BlitScaled(imageSurface, nullptr, destSurface, &container);
 		}
 
 		~Image()
@@ -33,10 +34,9 @@ namespace Engine
 			}
 		}
 
-		Image(const	Image&) {}
+		//Image(const Image&) = delete;
 
 	private:
 		SDL_Surface* imageSurface = nullptr;
-		SDL_Rect destRect{ 0,0,0,0 };
 	};
 }

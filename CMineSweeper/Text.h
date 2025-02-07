@@ -2,17 +2,18 @@
 #include <SDL_ttf.h>
 #include <string>
 #include "Globals.h"
+#include "Component.h"
 
 namespace Engine
 {
-	class Text
+	class Text : public Component
 	{
 	public:
 		Text(int x, int y, int w, int h,
 			const std::string& text, 
 			SDL_Color color = { 0, 0,0,255 },
 			int fontSize = 60) : 
-			destRect{x, y, w, h}, textColor(color)
+			Component{x, y, w, h}, textColor(color)
 		{
 			font = TTF_OpenFont(Config::FONT.c_str(), fontSize);
 
@@ -38,7 +39,7 @@ namespace Engine
 
 			textSurface = TTF_RenderUTF8_Blended(font, text.c_str(), color);
 
-			auto [x, y, w, h] = destRect;
+			auto [x, y, w, h] = container;
 
 			//Horizontal Centering
 			const int widthDifference = w - textSurface->w;
@@ -51,7 +52,7 @@ namespace Engine
 			textPos = { x + leftOffset, y + topOffset, w-widthDifference, h-heightDifference };
 		}
 
-		void Render(SDL_Surface* surface)
+		void Render(SDL_Surface* surface) override
 		{
 			SDL_BlitScaled(textSurface, nullptr, surface, &textPos);
 		}
@@ -65,7 +66,6 @@ namespace Engine
 	private:
 		SDL_Surface* textSurface = nullptr;
 		TTF_Font* font = nullptr;
-		SDL_Rect destRect{ 0,0,0,0 };
 		SDL_Rect textPos{ 0,0,0,0 };
 		SDL_Color textColor{ 0,0,0,255 };
 	};

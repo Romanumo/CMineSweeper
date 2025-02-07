@@ -15,7 +15,7 @@ public:
         image{x + Config::PADDING, y + Config::PADDING,
             Config::FOOTER_HEIGHT - Config::PADDING,
             Config::FOOTER_HEIGHT - Config::PADDING,
-            Config::FLAG_IMAGE, 24 },
+            Config::FLAG_IMAGE},
         text {x + Config::FOOTER_HEIGHT, y,
             w - Config::FOOTER_HEIGHT - 24, h,
             std::to_string(Config::BOMB_COUNT),
