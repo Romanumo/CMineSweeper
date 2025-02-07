@@ -1,5 +1,5 @@
 #pragma once
-//#define SHOW_DEBUG_HELPERS
+#define SHOW_DEBUG_HELPERS
 
 #include<iostream>
 #include<SDL.h>

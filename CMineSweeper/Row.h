@@ -24,8 +24,7 @@ namespace Engine
 
 			SDL_Rect* objRect = child.GetRect();
 			SDL_Rect* myRect = GetRect();
-			objRect->x = myRect->w + myRect->x;
-			objRect->y = myRect->y + padding;
+			child.SetPosition(myRect->w + myRect->x, myRect->y + padding);
 
 			StretchContainer(objRect, myRect);
 		}

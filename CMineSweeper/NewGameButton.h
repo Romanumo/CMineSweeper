@@ -8,7 +8,10 @@ class NewGameButton : public Engine::Button
 public:
 	NewGameButton(int x, int y, int w, int h) :
 		Button{ x, y, w, h },
-		text{ x, y, w, h, "New Game", {}, 40 } {};
+		text{ x, y, w, h, "New Game", {}, 40 } 
+	{
+		text.SetAsChildOf(this);
+	};
 
 	void Render(SDL_Surface* surface) override
 	{

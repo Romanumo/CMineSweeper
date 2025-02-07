@@ -9,6 +9,15 @@
 class MineSweeperUI
 {
 public:
+
+#ifdef SHOW_DEBUG_HELPERS
+	MineSweeperUI()
+	{
+		layout.PrintTree();
+	}
+#endif // SHOW_DEBUG_HELPERS
+
+
 	void Render(SDL_Surface* surface)
 	{
 		minesweeperGrid.Render(surface);
@@ -25,13 +34,11 @@ public:
 private:
 	Grid minesweeperGrid{Config::PADDING, Config::PADDING};
 
-	NewGameButton newGameButton{0,
-	Config::GRID_HEIGHT + Config::PADDING * 2,
+	NewGameButton newGameButton{0, 0,
 	Config::GRID_WIDTH - Config::COUNTER_WIDTH,
 	Config::FOOTER_HEIGHT - Config::PADDING };
 
-	FlagCounter counter{ 0,
-	Config::GRID_HEIGHT + Config::PADDING * 2,
+	FlagCounter counter{ 0,0,
 	Config::COUNTER_WIDTH - Config::PADDING,
 	Config::FOOTER_HEIGHT - Config::PADDING
 	};
@@ -39,7 +46,7 @@ private:
 	Engine::Row layout{ Config::PADDING, Config::PADDING,
 		Config::GRID_HEIGHT + Config::PADDING,
 		std::vector<Engine::Component*>{
-		&newGameButton, &counter
+		&counter, &newGameButton
 		} 
 	};
 };

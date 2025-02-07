@@ -1,7 +1,13 @@
 #pragma once
 #include <SDL.h>
+#include <typeinfo>
+#include <string>
 #include "Globals.h"
 
+//TODO:
+//Separate Component into h and cpp
+//Create an abstract method for HandleEvent
+//Implement a Relative Positioning for non layout object
 namespace Engine
 {
 	class Component
@@ -55,6 +61,20 @@ namespace Engine
 		}
 
 		Component* GetParent() { return parent; }
+		std::string GetName(){return typeid(*this).name();}
+
+		void PrintTree(int spacing = 0)
+		{
+			std::string offset(spacing, '-');
+			std::cout << offset << GetName() << std::endl;
+
+			if (children.size() < 1) return;
+
+			for (Component* component : children)
+			{
+				component->PrintTree(spacing+1);
+			}
+		}
 
 		virtual void Render(SDL_Surface* surface) {}
 
