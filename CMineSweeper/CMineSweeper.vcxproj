@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="CMineSweeper.cpp" />
+    <ClCompile Include="Component.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />

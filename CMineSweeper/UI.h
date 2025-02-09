@@ -13,7 +13,7 @@ public:
 #ifdef SHOW_DEBUG_HELPERS
 	MineSweeperUI()
 	{
-		layout.PrintTree();
+		layout.PrintFamilyTree();
 	}
 #endif // SHOW_DEBUG_HELPERS
 

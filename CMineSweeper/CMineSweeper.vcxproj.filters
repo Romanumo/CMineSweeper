@@ -30,6 +30,9 @@
     <ClCompile Include="Cell.cpp">
       <Filter>Header Files\MineSweeper</Filter>
     </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Header Files\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
