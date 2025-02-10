@@ -4,8 +4,14 @@
 #include <string>
 #include "Globals.h"
 
+//Relative positioning work in this way
+//SDL_Rect that every child has, now would be overwritten
+//TO be relative rather than absolute. 
+//This changes their relative point from which they cound a distance
+//So a child with 12:13 and parent with 15:10
+//Now becomes a child with 27:23
+
 //TODO:
-//Implement a Relative Positioning for non layout object
 //Create column
 //Refactor and check code
 namespace Engine
@@ -51,6 +57,9 @@ namespace Engine
 
 	private:
 		SDL_Rect rect{ 0,0,0,0 };
+
+		//This rect is the relative positioning from parent
+		SDL_Rect relativeRect = rect;
 
 		void SetAsParentOf(Component* child);
 	};
