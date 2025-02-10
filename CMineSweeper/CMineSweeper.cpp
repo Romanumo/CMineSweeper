@@ -6,6 +6,7 @@
 #include "Globals.h"
 #include "Window.h"
 #include "UI.h"
+#include "Component.h"
 using namespace std;
 
 int main(int argc, char** argv)

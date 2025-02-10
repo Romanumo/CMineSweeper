@@ -60,6 +60,8 @@ namespace Engine
 			if (textSurface) { SDL_FreeSurface(textSurface); }
 		}
 
+		virtual void HandleEvent(const SDL_Event& event) override {}
+
 	private:
 		SDL_Surface* textSurface = nullptr;
 		TTF_Font* font = nullptr;

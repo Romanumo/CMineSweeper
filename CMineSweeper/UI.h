@@ -27,8 +27,7 @@ public:
 	void HandleEvent(const SDL_Event& event)
 	{
 		minesweeperGrid.HandleEvent(event);
-		newGameButton.HandleEvent(event);
-		counter.HandleEvent(event);
+		layout.HandleEvent(event);
 	}
 
 private:

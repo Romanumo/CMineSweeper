@@ -5,7 +5,6 @@
 #include "Globals.h"
 
 //TODO:
-//Create an abstract method for HandleEvent
 //Create Vector2D struct
 //Implement a Relative Positioning for non layout object
 namespace Engine
@@ -30,7 +29,8 @@ namespace Engine
 
 		void PrintFamilyTree(int spacing = 0);
 
-		virtual void Render(SDL_Surface* surface) {}
+		virtual void Render(SDL_Surface* surface) = 0;
+		virtual void HandleEvent(const SDL_Event& event) = 0;
 
 		virtual ~Component() = default;
 

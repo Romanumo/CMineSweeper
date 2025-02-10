@@ -34,6 +34,8 @@ namespace Engine
 			}
 		}
 
+		virtual void HandleEvent(const SDL_Event& event) override {}
+
 		//Image(const Image&) = delete;
 
 	private:

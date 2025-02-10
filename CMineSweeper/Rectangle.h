@@ -20,6 +20,8 @@ namespace Engine
 				color.r, color.g, color.b));
 		}
 
+		virtual void HandleEvent(const SDL_Event& event) override {}
+
 		void SetColor(SDL_Color col) { color = col; }
 
 	private:

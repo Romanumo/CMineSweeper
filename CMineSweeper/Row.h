@@ -46,6 +46,14 @@ namespace Engine
 			}
 		}
 
+		void HandleEvent(const SDL_Event& event) override
+		{
+			for (Component* component : children)
+			{
+				component->HandleEvent(event);
+			}
+		}
+
 		Row() = default;
 
 	protected:

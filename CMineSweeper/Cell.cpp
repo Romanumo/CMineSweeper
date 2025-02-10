@@ -11,7 +11,7 @@ Cell::Cell(int x, int y, int w, int h, int row, int col) :
 	std::to_string(adjacentBombs),
 	Config::TEXT_COLORS[adjacentBombs]} { };
 
-void Cell::HandleEvent(const SDL_Event& event)
+void Cell::HandleEvent(const SDL_Event& event) 
 {
 	if (event.type == UserEvents::CELL_CLEARED)
 	{
