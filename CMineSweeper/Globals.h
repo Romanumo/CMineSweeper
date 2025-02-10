@@ -1,5 +1,5 @@
 #pragma once
-#define SHOW_DEBUG_HELPERS
+//#define SHOW_DEBUG_HELPERS
 
 #include<iostream>
 #include<SDL.h>
@@ -26,7 +26,7 @@ namespace Config
 	inline const std::string GAME_NAME = "MineSweeper";
 	inline constexpr int GRID_COLUMNS = 8;
 	inline constexpr int GRID_ROWS = 6;
-	inline constexpr int BOMB_COUNT = 10;
+	inline constexpr int BOMB_COUNT = 6;
 	static_assert(
 		BOMB_COUNT < GRID_COLUMNS * GRID_ROWS, 
 		"Cannot have more bombs than cells");

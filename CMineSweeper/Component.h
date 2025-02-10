@@ -5,8 +5,9 @@
 #include "Globals.h"
 
 //TODO:
-//Create Vector2D struct
 //Implement a Relative Positioning for non layout object
+//Create column
+//Refactor and check code
 namespace Engine
 {
 	class Component
@@ -19,11 +20,14 @@ namespace Engine
 		}
 
 		std::string GetName() { return typeid(*this).name(); }
+		const SDL_Rect* GetRect() const { return &rect; }
 
 		SDL_Rect* GetRect() { return &rect; }
-		virtual void SetPosition(int x, int y);
-
 		Component* GetParent() { return parent; }
+
+		virtual void SetPosition(int x, int y);
+		virtual void SetSize(int w, int h);
+
 		bool SetAsChildOf(Component* parent, std::string childName = "", 
 			std::string parentName = "");
 

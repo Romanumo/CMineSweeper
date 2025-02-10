@@ -14,6 +14,12 @@ void Component::SetPosition(int x, int y)
 	HandleChildPosition();
 }
 
+void Component::SetSize(int w, int h)
+{
+	rect.w = w;
+	rect.h = h;
+}
+
 #pragma region FamilyFunctions
 
 void Component::PrintFamilyTree(int spacing)
@@ -35,7 +41,6 @@ void Component::HandleChildPosition()
 
 	for (Component* component : children)
 	{
-		//TODO: Add a relative posiitoning
 		component->SetPosition(rect.x, rect.y);
 	}
 }

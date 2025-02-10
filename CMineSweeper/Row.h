@@ -22,20 +22,25 @@ namespace Engine
 		{
 			if (!child.SetAsChildOf(this)) return;
 
-			SDL_Rect* objRect = child.GetRect();
-			SDL_Rect* myRect = GetRect();
+			const SDL_Rect* myRect = GetRect();
+			const SDL_Rect* objRect = child.GetRect();
 			child.SetPosition(myRect->w + myRect->x, myRect->y + padding);
 
 			StretchContainer(objRect, myRect);
 		}
 
-		void StretchContainer(const SDL_Rect* objRect, SDL_Rect* myRect)
+		void StretchContainer(const SDL_Rect* objRect, const SDL_Rect* myRect)
 		{
-			myRect->w += objRect->w + padding;
+			int updatedW = 0;
+			int updatedH = 0;
+
+			updatedW = objRect->w + myRect->w + padding;
 			if (objRect->h > myRect->h)
 			{
-				myRect->h = objRect->h;
+				updatedH = objRect->h;
 			}
+
+			SetSize(updatedW, updatedH);
 		}
 
 		void Render(SDL_Surface* surface) override
