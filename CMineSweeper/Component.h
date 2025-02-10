@@ -20,19 +20,20 @@ namespace Engine
 	{
 	public:
 		Component(int x, int y, int w, int h) :
-			rect{ x, y, w, h } , parent(nullptr)
+			absTf{ x, y, w, h } , parent(nullptr)
 		{
 			children.reserve(Config::MAX_CHILDREN);
 		}
 
 		std::string GetName() { return typeid(*this).name(); }
-		const SDL_Rect* GetRect() const { return &rect; }
+		const SDL_Rect* GetRect() const { return &absTf; }
 
-		SDL_Rect* GetRect() { return &rect; }
+		SDL_Rect* GetRect() { return &absTf; }
 		Component* GetParent() { return parent; }
 
-		virtual void SetPosition(int x, int y);
-		virtual void SetSize(int w, int h);
+		void SetRelPosition(int x, int y);
+		void SetRelSize(int w, int h);
+		virtual void UpdatePosition();
 
 		bool SetAsChildOf(Component* parent, std::string childName = "", 
 			std::string parentName = "");
@@ -56,11 +57,15 @@ namespace Engine
 		bool IsWithinBounds(int x, int y) const;
 
 	private:
-		SDL_Rect rect{ 0,0,0,0 };
+		//Stands for absolute transform
+		SDL_Rect absTf{ 0,0,0,0 };
 
-		//This rect is the relative positioning from parent
-		SDL_Rect relativeRect = rect;
+		//This rect is the relative positioning from parent position
+		//The starting point of which is Parent position
+		//When no parent a starting point is 0,0
+		SDL_Rect relTf = absTf;
 
 		void SetAsParentOf(Component* child);
+		void UpdateAbsTf();
 	};
 }

@@ -6,18 +6,37 @@
 #include "Component.h"
 using namespace Engine;
 
-void Component::SetPosition(int x, int y)
+void Component::SetRelPosition(int x, int y)
 {
-	rect.x = x;
-	rect.y = y;
+	relTf.x = x;
+	relTf.y = y;
 
+	UpdatePosition();
+}
+
+void Component::SetRelSize(int w, int h)
+{
+	relTf.w = w;
+	relTf.h = h;
+
+	UpdateAbsTf();
+}
+
+void Component::UpdatePosition()
+{
+	UpdateAbsTf();
 	HandleChildPosition();
 }
 
-void Component::SetSize(int w, int h)
+void Component::UpdateAbsTf()
 {
-	rect.w = w;
-	rect.h = h;
+	absTf = relTf;
+	
+	if (parent != nullptr)
+	{
+		absTf.x += parent->GetRect()->x;
+		absTf.y += parent->GetRect()->y;
+	}
 }
 
 #pragma region FamilyFunctions
@@ -41,7 +60,7 @@ void Component::HandleChildPosition()
 
 	for (Component* component : children)
 	{
-		component->SetPosition(rect.x, rect.y);
+		component->UpdatePosition();
 	}
 }
 
@@ -107,10 +126,10 @@ void Component::SetAsParentOf(Component* child)
 
 bool Component::IsWithinBounds(int x, int y) const
 {
-	if (x < rect.x) return false;
-	if (y < rect.y) return false;
-	if (x > rect.x + rect.w) return false;
-	if (y > rect.y + rect.h) return false;
+	if (x < absTf.x) return false;
+	if (y < absTf.y) return false;
+	if (x > absTf.x + absTf.w) return false;
+	if (y > absTf.y + absTf.h) return false;
 
 	return true;
 }

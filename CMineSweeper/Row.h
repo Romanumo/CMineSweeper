@@ -24,7 +24,7 @@ namespace Engine
 
 			const SDL_Rect* myRect = GetRect();
 			const SDL_Rect* objRect = child.GetRect();
-			child.SetPosition(myRect->w + myRect->x, myRect->y + padding);
+			child.SetRelPosition(myRect->w, padding);
 
 			StretchContainer(objRect, myRect);
 		}
@@ -40,7 +40,7 @@ namespace Engine
 				updatedH = objRect->h;
 			}
 
-			SetSize(updatedW, updatedH);
+			SetRelSize(updatedW, updatedH);
 		}
 
 		void Render(SDL_Surface* surface) override
@@ -65,12 +65,12 @@ namespace Engine
 		void HandleChildPosition() override
 		{
 			if (children.size() < 1) return;
-			SDL_Rect* rect = GetRect();
+			const SDL_Rect* rect = GetRect();
 			int xLength = 0;
 
 			for (Component* component : children)
 			{
-				component->SetPosition(rect->x + xLength, rect->y);
+				component->SetRelPosition(xLength, 0);
 				xLength += component->GetRect()->w + padding;
 			}
 		}
