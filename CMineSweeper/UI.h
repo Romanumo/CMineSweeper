@@ -5,6 +5,7 @@
 #include "NewGameButton.h"
 #include "FlagCounter.h"
 #include "Row.h"
+#include "Column.h"
 
 class MineSweeperUI
 {
@@ -49,10 +50,13 @@ private:
 	Config::FOOTER_HEIGHT - Config::PADDING
 	};
 
-	Engine::Row layout{ Config::PADDING, Config::PADDING,
-		Config::GRID_HEIGHT + Config::PADDING,
+	Engine::Column layout{ 
 		std::vector<Engine::Component*>{
-		&counter, &newGameButton
+		&minesweeperGrid, new Engine::Row {
+			std::vector<Engine::Component*>{
+				&newGameButton, &counter
+				}
+			}
 		} 
 	};
 };

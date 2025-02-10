@@ -39,7 +39,7 @@ public:
     {
         /*if (event.type == SDL_MOUSEMOTION)
         {
-            SetPosition(event.motion.x, event.motion.y);
+            SetRelPosition(event.motion.x, event.motion.y);
         }*/
 
         if (event.type == UserEvents::FLAG_PLACED) 

@@ -11,7 +11,7 @@ void Component::SetRelPosition(int x, int y)
 	relTf.x = x;
 	relTf.y = y;
 
-	UpdatePosition();
+	UpdateTransform();
 }
 
 void Component::SetRelSize(int w, int h)
@@ -19,10 +19,10 @@ void Component::SetRelSize(int w, int h)
 	relTf.w = w;
 	relTf.h = h;
 
-	UpdateAbsTf();
+	UpdateTransform();
 }
 
-void Component::UpdatePosition()
+void Component::UpdateTransform()
 {
 	UpdateAbsTf();
 	HandleChildPosition();
@@ -60,7 +60,7 @@ void Component::HandleChildPosition()
 
 	for (Component* component : children)
 	{
-		component->UpdatePosition();
+		component->UpdateTransform();
 	}
 }
 

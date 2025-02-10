@@ -42,9 +42,9 @@ namespace Engine
 			UpdateTextPosition();
 		}
 
-		void UpdatePosition() override
+		void UpdateTransform() override
 		{
-			Component::UpdatePosition();
+			Component::UpdateTransform();
 			
 			UpdateTextPosition();
 		}

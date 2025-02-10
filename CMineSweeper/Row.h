@@ -2,39 +2,45 @@
 #include <vector>
 #include <iostream>
 #include <memory>
-#include "Component.h"
+#include "Layout.h"
 
 namespace Engine
 {
-	class Row : public Component
+	class Row : public Layout
 	{
 	public:
 		Row(int padding, int x, int y, std::vector<Component*> components) :
-			Component(x,y,0,0), padding(padding)
+			Layout(padding, x,y,components)
 		{
-			for (Component* component : components)
+			HandleChildPosition();
+		}
+
+		Row(std::vector<Component*> components) :
+			Row(Config::PADDING, Config::PADDING, Config::PADDING, components) {
+		}
+
+	protected:
+		void HandleChildPosition() override
+		{
+			if (children.size() < 1) return;
+
+			const SDL_Rect* rect = GetRect();
+			int xLength = 0;
+
+			for (Component* component : children)
 			{
-				AddComponent(*component);
+				component->SetRelPosition(xLength, GetPadding());
+				xLength += component->GetRect()->w + GetPadding();
 			}
 		}
 
-		void AddComponent(Component& child)
-		{
-			if (!child.SetAsChildOf(this)) return;
-
-			const SDL_Rect* myRect = GetRect();
-			const SDL_Rect* objRect = child.GetRect();
-			child.SetRelPosition(myRect->w, padding);
-
-			StretchContainer(objRect, myRect);
-		}
-
-		void StretchContainer(const SDL_Rect* objRect, const SDL_Rect* myRect)
+		void StretchContainer(const SDL_Rect* objRect, 
+							const SDL_Rect* myRect) override
 		{
 			int updatedW = 0;
 			int updatedH = 0;
 
-			updatedW = objRect->w + myRect->w + padding;
+			updatedW = objRect->w + myRect->w + GetPadding();
 			if (objRect->h > myRect->h)
 			{
 				updatedH = objRect->h;
@@ -42,40 +48,5 @@ namespace Engine
 
 			SetRelSize(updatedW, updatedH);
 		}
-
-		void Render(SDL_Surface* surface) override
-		{
-			for (Component* component : children)
-			{
-				component->Render(surface);
-			}
-		}
-
-		void HandleEvent(const SDL_Event& event) override
-		{
-			for (Component* component : children)
-			{
-				component->HandleEvent(event);
-			}
-		}
-
-		Row() = default;
-
-	protected:
-		void HandleChildPosition() override
-		{
-			if (children.size() < 1) return;
-			const SDL_Rect* rect = GetRect();
-			int xLength = 0;
-
-			for (Component* component : children)
-			{
-				component->SetRelPosition(xLength, 0);
-				xLength += component->GetRect()->w + padding;
-			}
-		}
-
-	private:
-		int padding = 0;
 	};
 }

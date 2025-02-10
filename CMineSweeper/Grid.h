@@ -3,11 +3,12 @@
 #include "Globals.h"
 #include "Cell.h"
 #include "Random.h"
+#include "Component.h"
 
-class Grid
+class Grid : public Engine::Component
 {
 public:
-	Grid(int x, int y)
+	Grid(int x, int y) : Component(x, y)
 	{
 		using namespace Config;
 		children.reserve(GRID_COLUMNS * GRID_ROWS);

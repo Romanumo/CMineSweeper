@@ -12,7 +12,7 @@
 //Now becomes a child with 27:23
 
 //TODO:
-//Create column
+//Create column and abtract with row
 //Refactor and check code
 namespace Engine
 {
@@ -33,7 +33,7 @@ namespace Engine
 
 		void SetRelPosition(int x, int y);
 		void SetRelSize(int w, int h);
-		virtual void UpdatePosition();
+		virtual void UpdateTransform();
 
 		bool SetAsChildOf(Component* parent, std::string childName = "", 
 			std::string parentName = "");
