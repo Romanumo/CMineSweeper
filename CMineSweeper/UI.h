@@ -18,28 +18,25 @@ public:
 	}
 #endif // SHOW_DEBUG_HELPERS
 
-
 	void Render(SDL_Surface* surface)
 	{
-		minesweeperGrid.Render(surface);
 		layout.Render(surface);
 	}
 
 	void HandleEvent(const SDL_Event& event)
 	{
-		minesweeperGrid.HandleEvent(event);
 		layout.HandleEvent(event);
 
 #ifdef SHOW_DEBUG_HELPERS
 		if (event.type == SDL_MOUSEMOTION)
 		{
-			layout.SetRelPosition(event.motion.x, event.motion.y);
+			layout(event.motion.x, event.motion.y);
 		}
 #endif
 	}
 
 private:
-	Grid minesweeperGrid{Config::PADDING, Config::PADDING};
+	Grid minesweeperGrid{0,0};
 
 	NewGameButton newGameButton{0, 0,
 	Config::GRID_WIDTH - Config::COUNTER_WIDTH,
@@ -50,11 +47,11 @@ private:
 	Config::FOOTER_HEIGHT - Config::PADDING
 	};
 
-	Engine::Column layout{ 
+	Engine::Column layout{ Config::PADDING, Config::PADDING,
 		std::vector<Engine::Component*>{
 		&minesweeperGrid, new Engine::Row {
 			std::vector<Engine::Component*>{
-				&newGameButton, &counter
+				&newGameButton,& counter
 				}
 			}
 		} 

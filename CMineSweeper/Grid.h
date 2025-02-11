@@ -8,35 +8,40 @@
 class Grid : public Engine::Component
 {
 public:
-	Grid(int x, int y) : Component(x, y)
+	Grid(int x, int y) : Component(x, y, 0, 0)
 	{
 		using namespace Config;
 		children.reserve(GRID_COLUMNS * GRID_ROWS);
+
+		constexpr int spacing = CELL_SIZE + PADDING;
+		SetRelSize(GRID_COLUMNS * spacing - PADDING,
+					GRID_ROWS * spacing - PADDING);
+
 		for (int col = 0; col < GRID_COLUMNS;col++)
 		{
 			for (int row = 0; row < GRID_ROWS;row++)
 			{
-				constexpr int spacing = CELL_SIZE + PADDING;
-				children.emplace_back(
-					x + spacing * col,
-					y + spacing * row,
+				Cell* cell  = new Cell(0,0,
 					CELL_SIZE, CELL_SIZE, row + 1, col + 1
 				);
+				cell->SetRelPosition(col * spacing,row * spacing);
+
+				cell->SetAsChildOf(this);
 			}
 		}
 
 		PlaceBombs();
 	}
 
-	void Render(SDL_Surface* surface)
+	void Render(SDL_Surface* surface) override
 	{
-		for (auto& child : children)
+		for (Component* child : children)
 		{
-			child.Render(surface);
+			child->Render(surface);
 		}
 	}
 
-	void HandleEvent(const SDL_Event& event)
+	void HandleEvent(const SDL_Event& event) override
 	{
 		if (event.type == UserEvents::CELL_CLEARED)
 		{
@@ -44,22 +49,40 @@ public:
 		}
 		if (event.type == UserEvents::NEW_GAME)
 		{
-			for (auto& child : children)
+			for (Component* child : children)
 			{
-				child.Reset();
+				if (Cell* cell = dynamic_cast<Cell*>(child))
+				{
+					cell->Reset();				
+				}
 			}
 
 			PlaceBombs();
 		}
 
-		for (auto& child : children)
+		for (Component* child : children)
 		{
-			child.HandleEvent(event);
+			child->HandleEvent(event);
 		}
 	}
 
+protected:
+	/*virtual void HandleChildPosition()
+	{
+		if (children.size() < 1) return;
+
+		using namespace Config;
+		for (int col = 0; col < GRID_COLUMNS;col++)
+		{
+			for (int row = 0; row < GRID_ROWS;row++)
+			{
+				constexpr int spacing = CELL_SIZE + PADDING;
+				children[col * GRID_ROWS + row]->
+			}
+		}
+	}*/
+
 private:
-	std::vector<Cell> children;
 	int cellsToClear = 0;
 
 	void PlaceBombs()
@@ -72,9 +95,13 @@ private:
 		{
 			const size_t randomIndex =
 				Engine::Random::Int(0, children.size() - 1);
-			if (children[randomIndex].PlaceBomb())
+
+			if (Cell* cell = dynamic_cast<Cell*>(children[randomIndex]))
 			{
-				--bombsToPlace;
+				if (cell->PlaceBomb())
+				{
+					--bombsToPlace;
+				}
 			}
 		}
 	}

@@ -9,14 +9,18 @@ namespace Engine
 	class Column : public Layout
 	{
 	public:
-		Column(int padding, int x, int y, std::vector<Component*> components) :
-			Layout(padding, x, y, components) 
+		Column(int padding, int margin, int x, int y, std::vector<Component*> components) :
+			Layout(padding, margin, x, y, components) 
 		{
 			HandleChildPosition();
 		}
 
+		Column(int padding, int margin, std::vector<Component*> components) :
+			Column(padding, margin, 0, 0, components) {
+		}
+
 		Column(std::vector<Component*> components) :
-			Column(Config::PADDING, Config::PADDING, Config::PADDING, components) {}
+			Column(Config::PADDING, 0, 0,0, components) {}
 
 	protected:
 		void HandleChildPosition() override
@@ -24,11 +28,11 @@ namespace Engine
 			if (children.size() < 1) return;
 
 			const SDL_Rect* rect = GetRect();
-			int yLength = 0;
+			int yLength = GetMargin();
 
 			for (Component* component : children)
 			{
-				component->SetRelPosition(GetPadding(), yLength);
+				component->SetRelPosition(GetMargin(), yLength);
 				yLength += component->GetRect()->h + GetPadding();
 			}
 		}

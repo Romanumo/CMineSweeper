@@ -9,14 +9,18 @@ namespace Engine
 	class Row : public Layout
 	{
 	public:
-		Row(int padding, int x, int y, std::vector<Component*> components) :
-			Layout(padding, x,y,components)
+		Row(int padding, int margin, int x, int y, std::vector<Component*> components) :
+			Layout(padding, margin, x, y, components)
 		{
 			HandleChildPosition();
 		}
 
+		Row(int padding, int margin, std::vector<Component*> components) :
+			Row(padding, margin, 0, 0, components) {
+		}
+
 		Row(std::vector<Component*> components) :
-			Row(Config::PADDING, Config::PADDING, Config::PADDING, components) {
+			Row(Config::PADDING, 0, 0, 0, components) {
 		}
 
 	protected:
@@ -25,11 +29,11 @@ namespace Engine
 			if (children.size() < 1) return;
 
 			const SDL_Rect* rect = GetRect();
-			int xLength = 0;
+			int xLength = GetMargin();
 
 			for (Component* component : children)
 			{
-				component->SetRelPosition(xLength, GetPadding());
+				component->SetRelPosition(xLength, GetMargin());
 				xLength += component->GetRect()->w + GetPadding();
 			}
 		}

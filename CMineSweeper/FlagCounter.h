@@ -21,7 +21,7 @@ public:
             w - Config::FOOTER_HEIGHT - 24, h,
             std::to_string(Config::BOMB_COUNT),
             {255, 255, 255, 255}, 30}, 
-        layout{ Config::PADDING, 0, 0,
+        layout{ Config::PADDING, Config::PADDING, 0, 0,
             std::vector<Engine::Component*>{
             &image,&text
             }} 

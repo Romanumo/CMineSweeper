@@ -12,15 +12,33 @@
 //Now becomes a child with 27:23
 
 //TODO:
-//Create column and abtract with row
+//Rename GetRect into GetAbsRect
+//Encapsulate children access and others non essential
 //Refactor and check code
+
+//What about a situation when the parent dies?
+//Does the child die with him?
+//What about layout, it can have an reference created to an object
+//Does it have to delete all the object when that layout dies?
+//You need to free space after all
+
+//Component inheritance have confusing names.
+//AS I still get lost in what to oevrride and what to leave. 
+//Especially dealing with inheritance
+
+//Create on how should locations work, like
+//Padding situations, does column have padding only outside
+//Or its inckuded inside as well?
+//Might need to have padding be what it is, so look up on internet
+//Since padding is inner margin, then the goal is to have
+//Layout cover FULL Window and have inner padding
 namespace Engine
 {
 	class Component
 	{
 	public:
 		Component(int x, int y, int w, int h) :
-			absTf{ x, y, w, h } , parent(nullptr)
+			relTf{ x, y, w, h } , parent(nullptr)
 		{
 			children.reserve(Config::MAX_CHILDREN);
 		}
@@ -46,7 +64,6 @@ namespace Engine
 		virtual ~Component() = default;
 
 	protected:
-
 		std::vector<Component*> children;
 		Component* parent;
 
