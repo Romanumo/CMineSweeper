@@ -1,12 +1,12 @@
 #pragma once
 #include <string>
 
-#include "Globals.h"
+#include "Engine/Globals.h"
 
-#include "Rectangle.h"
-#include "Image.h"
-#include "Text.h"
-#include "Row.h"
+#include "Engine/Rectangle.h"
+#include "Engine/Image.h"
+#include "Engine/Text.h"
+#include "Engine/Row.h"
 
 class FlagCounter : public Engine::Rectangle
 {

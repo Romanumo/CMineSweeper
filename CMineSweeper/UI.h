@@ -1,11 +1,13 @@
 #pragma once
 #include <SDL.h>
+
+#include "Engine/Component.h"
+#include "Engine/Row.h"
+#include "Engine/Column.h"
+
 #include "Grid.h"
-#include "Component.h"
 #include "NewGameButton.h"
 #include "FlagCounter.h"
-#include "Row.h"
-#include "Column.h"
 
 class MineSweeperUI
 {

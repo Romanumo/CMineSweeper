@@ -1,7 +1,7 @@
 #pragma once
-#include "Button.h"
-#include "GLobals.h"
-#include "Text.h"
+#include "Engine/Button.h"
+#include "Engine/Globals.h"
+#include "Engine/Text.h"
 
 class NewGameButton : public Engine::Button
 {

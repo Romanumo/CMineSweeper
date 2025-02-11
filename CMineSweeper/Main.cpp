@@ -3,10 +3,10 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
-#include "Globals.h"
-#include "Window.h"
+#include "Engine/Globals.h"
+#include "Engine/Window.h"
+#include "Engine/Component.h"
 #include "UI.h"
-#include "Component.h"
 using namespace std;
 
 int main(int argc, char** argv)

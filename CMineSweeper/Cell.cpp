@@ -1,6 +1,6 @@
 #include "Cell.h"
 #include <iostream>
-#include "Globals.h"
+#include "Engine/Globals.h"
 
 //But every CELL has A BOMB IMAGE
 Cell::Cell(int x, int y, int w, int h, int row, int col) :

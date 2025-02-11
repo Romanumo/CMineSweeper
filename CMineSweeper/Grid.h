@@ -1,9 +1,10 @@
 #pragma once
 #include <vector>
-#include "Globals.h"
+
+#include "Engine/Globals.h"
+#include "Engine/Random.h"
+#include "Engine/Component.h"
 #include "Cell.h"
-#include "Random.h"
-#include "Component.h"
 
 class Grid : public Engine::Component
 {
