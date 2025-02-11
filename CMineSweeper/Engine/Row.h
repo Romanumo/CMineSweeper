@@ -26,15 +26,14 @@ namespace Engine
 	protected:
 		void HandleChildPosition() override
 		{
-			if (children.size() < 1) return;
+			if (GetChildren().size() < 1) return;
 
-			const SDL_Rect* rect = GetRect();
 			int xLength = GetMargin();
 
-			for (Component* component : children)
+			for (Component* component : GetChildren())
 			{
 				component->SetRelPosition(xLength, GetMargin());
-				xLength += component->GetRect()->w + GetPadding();
+				xLength += component->GetAbsTf()->w + GetPadding();
 			}
 		}
 

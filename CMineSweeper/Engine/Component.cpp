@@ -6,6 +6,14 @@
 #include "Component.h"
 using namespace Engine;
 
+Component::Component(int x, int y, int w, int h) :
+	relTf{ x, y, w, h }, parent(nullptr)
+{
+	UpdateTransform();
+}
+
+#pragma region Positioning
+
 void Component::SetRelPosition(int x, int y)
 {
 	relTf.x = x;
@@ -31,13 +39,25 @@ void Component::UpdateTransform()
 void Component::UpdateAbsTf()
 {
 	absTf = relTf;
-	
+
 	if (parent != nullptr)
 	{
-		absTf.x += parent->GetRect()->x;
-		absTf.y += parent->GetRect()->y;
+		absTf.x += parent->GetAbsTf()->x;
+		absTf.y += parent->GetAbsTf()->y;
 	}
 }
+
+void Component::HandleChildPosition()
+{
+	if (children.size() < 1) return;
+
+	for (Component* component : children)
+	{
+		component->UpdateTransform();
+	}
+}
+
+#pragma endregion
 
 #pragma region FamilyFunctions
 
@@ -54,18 +74,7 @@ void Component::PrintFamilyTree(int spacing)
 	}
 }
 
-void Component::HandleChildPosition()
-{
-	if (children.size() < 1) return;
-
-	for (Component* component : children)
-	{
-		component->UpdateTransform();
-	}
-}
-
-bool Component::SetAsChildOf(Component* parent, std::string childName,
-	std::string parentName)
+bool Component::SetAsChildOf(Component* parent)
 {
 	if (parent == this)
 	{
@@ -83,12 +92,6 @@ bool Component::SetAsChildOf(Component* parent, std::string childName,
 	{
 		std::cout << "Component cannot be a child of his relative" << std::endl;
 		return false;
-	}
-
-	if (childName.size() > 0 && parentName.size() > 0)
-	{
-		std::cout << childName << " Is a child of "
-			<< parentName << std::endl;
 	}
 
 	this->parent = parent;
@@ -121,6 +124,19 @@ void Component::SetAsParentOf(Component* child)
 {
 	children.push_back(child);
 }
+
+void Component::ReserveChildrenSize(int reserve) { children.reserve(reserve); }
+
+#pragma endregion
+
+#pragma region GettersSetters
+
+std::string Component::GetName() { return typeid(*this).name(); }
+Component* Component::GetParent() { return parent; }
+const std::vector<Component*> Component::GetChildren() { return children; }
+
+const SDL_Rect* Component::GetAbsTf() const { return &absTf; }
+SDL_Rect* Component::GetAbsTf() { return &absTf; }
 
 #pragma endregion
 

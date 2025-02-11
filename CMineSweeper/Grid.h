@@ -12,7 +12,7 @@ public:
 	Grid(int x, int y) : Component(x, y, 0, 0)
 	{
 		using namespace Config;
-		children.reserve(GRID_COLUMNS * GRID_ROWS);
+		ReserveChildrenSize(GRID_COLUMNS * GRID_ROWS);
 
 		constexpr int spacing = CELL_SIZE + PADDING;
 		SetRelSize(GRID_COLUMNS * spacing - PADDING,
@@ -22,10 +22,11 @@ public:
 		{
 			for (int row = 0; row < GRID_ROWS;row++)
 			{
-				Cell* cell  = new Cell(0,0,
+				Cell* cell  = new Cell(
+					col * spacing,
+					row * spacing,
 					CELL_SIZE, CELL_SIZE, row + 1, col + 1
 				);
-				cell->SetRelPosition(col * spacing,row * spacing);
 
 				cell->SetAsChildOf(this);
 			}
@@ -36,7 +37,7 @@ public:
 
 	void Render(SDL_Surface* surface) override
 	{
-		for (Component* child : children)
+		for (Component* child : GetChildren())
 		{
 			child->Render(surface);
 		}
@@ -50,7 +51,7 @@ public:
 		}
 		if (event.type == UserEvents::NEW_GAME)
 		{
-			for (Component* child : children)
+			for (Component* child : GetChildren())
 			{
 				if (Cell* cell = dynamic_cast<Cell*>(child))
 				{
@@ -61,7 +62,7 @@ public:
 			PlaceBombs();
 		}
 
-		for (Component* child : children)
+		for (Component* child : GetChildren())
 		{
 			child->HandleEvent(event);
 		}
@@ -95,9 +96,9 @@ private:
 		while (bombsToPlace > 0)
 		{
 			const size_t randomIndex =
-				Engine::Random::Int(0, children.size() - 1);
+				Engine::Random::Int(0, GetChildren().size() - 1);
 
-			if (Cell* cell = dynamic_cast<Cell*>(children[randomIndex]))
+			if (Cell* cell = dynamic_cast<Cell*>(GetChildren()[randomIndex]))
 			{
 				if (cell->PlaceBomb())
 				{

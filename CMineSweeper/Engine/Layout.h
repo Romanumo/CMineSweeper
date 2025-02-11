@@ -24,15 +24,15 @@ namespace Engine
 		{
 			if (!child.SetAsChildOf(this)) return;
 
-			const SDL_Rect* myRect = GetRect();
-			const SDL_Rect* objRect = child.GetRect();
+			const SDL_Rect* myRect = GetAbsTf();
+			const SDL_Rect* objRect = child.GetAbsTf();
 
 			StretchContainer(objRect, myRect);
 		}
 
 		void Render(SDL_Surface* surface) override
 		{
-			for (Component* component : children)
+			for (Component* component : GetChildren())
 			{
 				component->Render(surface);
 			}
@@ -40,7 +40,7 @@ namespace Engine
 
 		void HandleEvent(const SDL_Event& event) override
 		{
-			for (Component* component : children)
+			for (Component* component : GetChildren())
 			{
 				component->HandleEvent(event);
 			}

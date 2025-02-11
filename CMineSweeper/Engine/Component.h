@@ -11,12 +11,7 @@
 //So a child with 12:13 and parent with 15:10
 //Now becomes a child with 27:23
 
-//TODO:
-//Sort Files
-//Rename GetRect into GetAbsRect
-//Encapsulate children access and others non essential
-//Refactor and check code
-
+//Problems:
 //What about a situation when the parent dies?
 //Does the child die with him?
 //What about layout, it can have an reference created to an object
@@ -38,25 +33,19 @@ namespace Engine
 	class Component
 	{
 	public:
-		Component(int x, int y, int w, int h) :
-			relTf{ x, y, w, h } , parent(nullptr)
-		{
-			children.reserve(Config::MAX_CHILDREN);
-		}
+		Component(int x, int y, int w, int h);
 
-		std::string GetName() { return typeid(*this).name(); }
-		const SDL_Rect* GetRect() const { return &absTf; }
+		std::string GetName();
+		Component* GetParent();
+		const std::vector<Component*> GetChildren();
 
-		SDL_Rect* GetRect() { return &absTf; }
-		Component* GetParent() { return parent; }
+		SDL_Rect* GetAbsTf();
+		const SDL_Rect* GetAbsTf() const;
 
-		void SetRelPosition(int x, int y);
 		void SetRelSize(int w, int h);
-		virtual void UpdateTransform();
+		void SetRelPosition(int x, int y);
 
-		bool SetAsChildOf(Component* parent, std::string childName = "", 
-			std::string parentName = "");
-
+		bool SetAsChildOf(Component* parent);
 		void PrintFamilyTree(int spacing = 0);
 
 		virtual void Render(SDL_Surface* surface) = 0;
@@ -65,25 +54,22 @@ namespace Engine
 		virtual ~Component() = default;
 
 	protected:
-		std::vector<Component*> children;
-		Component* parent;
-
 		virtual void HandleChildPosition();
 
+		void ReserveChildrenSize(int reserve);
 		bool IsMyChild(Component* child) const;
 		bool IsMyRelative(Component* child);
 		bool IsWithinBounds(int x, int y) const;
 
 	private:
-		//Stands for absolute transform
 		SDL_Rect absTf{ 0,0,0,0 };
-
-		//This rect is the relative positioning from parent position
-		//The starting point of which is Parent position
-		//When no parent a starting point is 0,0
 		SDL_Rect relTf = absTf;
 
-		void SetAsParentOf(Component* child);
+		Component* parent;
+		std::vector<Component*> children;
+
 		void UpdateAbsTf();
+		void UpdateTransform();
+		void SetAsParentOf(Component* child);
 	};
 }

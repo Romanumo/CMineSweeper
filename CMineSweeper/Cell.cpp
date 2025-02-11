@@ -5,11 +5,11 @@
 //But every CELL has A BOMB IMAGE
 Cell::Cell(int x, int y, int w, int h, int row, int col) :
 	Button{ x, y, w, h }, row(row), col(col),
-	bombImage{x, y, w, h, Config::BOMB_IMAGE},
-	flagImage{ x, y, w, h, Config::FLAG_IMAGE },
-	text{x, y, w, h,
+	bombImage{ 0,0 , w, h, Config::BOMB_IMAGE },
+	flagImage{ 0,0, w, h, Config::FLAG_IMAGE },
+	text{ 0,0, w, h,
 	std::to_string(adjacentBombs),
-	Config::TEXT_COLORS[adjacentBombs]} 
+	Config::TEXT_COLORS[adjacentBombs] }
 {
 	bombImage.SetAsChildOf(this);
 	flagImage.SetAsChildOf(this);
@@ -18,6 +18,14 @@ Cell::Cell(int x, int y, int w, int h, int row, int col) :
 
 void Cell::HandleEvent(const SDL_Event& event) 
 {
+#ifdef SHOW_DEBUG_HELPERS
+	if (event.type == SDL_MOUSEBUTTONDOWN)
+	{
+		std::cout << "Cell y: " << GetAbsTf()->w <<
+			", Bomb y: " << bombImage.GetAbsTf()->w << std::endl;
+	}
+#endif
+
 	if (event.type == UserEvents::CELL_CLEARED)
 	{
 		HandleClearedCell(event.user);

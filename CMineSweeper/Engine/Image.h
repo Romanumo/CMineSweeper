@@ -23,7 +23,7 @@ namespace Engine
 
 		void Render(SDL_Surface* destSurface) override
 		{
-			SDL_BlitScaled(imageSurface, nullptr, destSurface, GetRect());
+			SDL_BlitScaled(imageSurface, nullptr, destSurface, GetAbsTf());
 		}
 
 		~Image()
@@ -35,8 +35,6 @@ namespace Engine
 		}
 
 		virtual void HandleEvent(const SDL_Event& event) override {}
-
-		//Image(const Image&) = delete;
 
 	private:
 		SDL_Surface* imageSurface = nullptr;

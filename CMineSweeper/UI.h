@@ -28,13 +28,6 @@ public:
 	void HandleEvent(const SDL_Event& event)
 	{
 		layout.HandleEvent(event);
-
-#ifdef SHOW_DEBUG_HELPERS
-		if (event.type == SDL_MOUSEMOTION)
-		{
-			layout(event.motion.x, event.motion.y);
-		}
-#endif
 	}
 
 private:

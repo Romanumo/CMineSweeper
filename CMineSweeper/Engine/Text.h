@@ -42,13 +42,6 @@ namespace Engine
 			UpdateTextPosition();
 		}
 
-		void UpdateTransform() override
-		{
-			Component::UpdateTransform();
-			
-			UpdateTextPosition();
-		}
-
 		void Render(SDL_Surface* surface) override
 		{
 			SDL_BlitScaled(textSurface, nullptr, surface, &textPos);
@@ -62,6 +55,13 @@ namespace Engine
 
 		virtual void HandleEvent(const SDL_Event& event) override {}
 
+	protected:
+		void HandleChildPosition() override
+		{
+			Component::HandleChildPosition();
+			UpdateTextPosition();
+		}
+
 	private:
 		SDL_Surface* textSurface = nullptr;
 		TTF_Font* font = nullptr;
@@ -70,7 +70,7 @@ namespace Engine
 
 		void UpdateTextPosition()
 		{
-			auto [x, y, w, h] = *GetRect();
+			auto [x, y, w, h] = *GetAbsTf();
 
 			//Horizontal Centering
 			const int widthDifference = w - textSurface->w;

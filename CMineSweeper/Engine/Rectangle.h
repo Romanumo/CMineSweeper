@@ -15,7 +15,7 @@ namespace Engine
 
 		virtual void Render(SDL_Surface* surface) override
 		{
-			SDL_FillRect(surface, GetRect(), SDL_MapRGB(
+			SDL_FillRect(surface, GetAbsTf(), SDL_MapRGB(
 				surface->format,
 				color.r, color.g, color.b));
 		}
