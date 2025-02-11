@@ -9,12 +9,10 @@ namespace Engine
 	{
 	public:
 		Button(int x, int y, int w, int h) :
-			Rectangle(x, y, w, h) 
-		{
-			SetColor(Config::BUTTON_COLOR);
+			Rectangle(x, y, w, h, Config::BUTTON_COLOR){
 		}
 
-		virtual void HandleEvent(const SDL_Event& event)
+		virtual void HandleEvent(const SDL_Event& event) override
 		{
 			if (!isEnabled) return;
 

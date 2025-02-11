@@ -9,9 +9,14 @@ Cell::Cell(int x, int y, int w, int h, int row, int col) :
 	flagImage{ x, y, w, h, Config::FLAG_IMAGE },
 	text{x, y, w, h,
 	std::to_string(adjacentBombs),
-	Config::TEXT_COLORS[adjacentBombs]} { };
+	Config::TEXT_COLORS[adjacentBombs]} 
+{
+	bombImage.SetAsChildOf(this);
+	flagImage.SetAsChildOf(this);
+	text.SetAsChildOf(this);
+};
 
-void Cell::HandleEvent(const SDL_Event& event)
+void Cell::HandleEvent(const SDL_Event& event) 
 {
 	if (event.type == UserEvents::CELL_CLEARED)
 	{

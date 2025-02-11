@@ -135,10 +135,14 @@
   <ItemGroup>
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="CMineSweeper.cpp" />
+    <ClCompile Include="Component.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="Cell.h" />
+    <ClInclude Include="Column.h" />
+    <ClInclude Include="Layout.h" />
+    <ClInclude Include="Row.h" />
     <ClInclude Include="FlagCounter.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Grid.h" />
@@ -147,7 +151,9 @@
     <ClInclude Include="Random.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="Text.h" />
+    <ClInclude Include="Component.h" />
     <ClInclude Include="UI.h" />
+    <ClInclude Include="Vector2D.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
