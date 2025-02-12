@@ -82,6 +82,12 @@ bool Component::SetAsChildOf(Component* parent)
 		return false;
 	}
 
+	if (this->parent != nullptr)
+	{
+		std::cout << "Component already have a parent" << std::endl;
+		return false;
+	}
+
 	if (IsMyChild(parent))
 	{
 		std::cout << "Component ancestor is his child" << std::endl;
@@ -133,7 +139,7 @@ void Component::ReserveChildrenSize(int reserve) { children.reserve(reserve); }
 
 std::string Component::GetName() { return typeid(*this).name(); }
 Component* Component::GetParent() { return parent; }
-const std::vector<Component*> Component::GetChildren() { return children; }
+const std::vector<Component*>& Component::GetChildren() { return children; }
 
 const SDL_Rect* Component::GetAbsTf() const { return &absTf; }
 SDL_Rect* Component::GetAbsTf() { return &absTf; }
