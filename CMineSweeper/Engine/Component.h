@@ -4,7 +4,13 @@
 #include <string>
 #include "Globals.h"
 
-//Problems:
+//Improvements:
+//Reduced Event Traffic
+//--Make Cell an observer of grid
+//Gameplay Improvements
+//Pooling Image Data
+//Timer and high score
+
 //When Minesweeper is completed
 //Rework your code again and now implement a unique pointers
 

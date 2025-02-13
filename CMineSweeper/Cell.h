@@ -3,8 +3,6 @@
 #include "Engine/Image.h"
 #include "Engine/Text.h"
 
-//Make image, text and another image  a pointers
-
 class Cell : public Engine::Button
 {
 public:

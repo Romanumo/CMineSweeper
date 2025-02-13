@@ -3,6 +3,8 @@
 #include "Engine/Globals.h"
 
 //But every CELL has A BOMB IMAGE
+//Make Cell an observer instead of relying on user events
+
 Cell::Cell(int x, int y, int w, int h, int row, int col) :
 	Button{ x, y, w, h }, row(row), col(col),
 	bombImage{ new Engine::Image{0,0 , w, h, Config::BOMB_IMAGE} },

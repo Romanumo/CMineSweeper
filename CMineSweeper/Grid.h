@@ -31,8 +31,6 @@ public:
 				cell->SetAsChildOf(this);
 			}
 		}
-
-		PlaceBombs();
 	}
 
 	void Render(SDL_Surface* surface) override
@@ -47,6 +45,8 @@ public:
 	{
 		if (event.type == UserEvents::CELL_CLEARED)
 		{
+			if (cellsToClear == 0) PlaceBombs();
+
 			HandleCellCleared(event.user);
 		}
 		if (event.type == UserEvents::NEW_GAME)
@@ -55,11 +55,11 @@ public:
 			{
 				if (Cell* cell = dynamic_cast<Cell*>(child))
 				{
-					cell->Reset();				
+					cell->Reset();		
 				}
 			}
 
-			PlaceBombs();
+			RefreshGrid();
 		}
 
 		for (Component* child : GetChildren())
@@ -68,24 +68,14 @@ public:
 		}
 	}
 
-protected:
-	/*virtual void HandleChildPosition()
-	{
-		if (children.size() < 1) return;
-
-		using namespace Config;
-		for (int col = 0; col < GRID_COLUMNS;col++)
-		{
-			for (int row = 0; row < GRID_ROWS;row++)
-			{
-				constexpr int spacing = CELL_SIZE + PADDING;
-				children[col * GRID_ROWS + row]->
-			}
-		}
-	}*/
-
 private:
+	//0 refers to no bombs have been planted
 	int cellsToClear = 0;
+
+	void RefreshGrid()
+	{
+		cellsToClear = 0;
+	}
 
 	void PlaceBombs()
 	{
