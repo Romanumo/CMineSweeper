@@ -24,12 +24,8 @@ void Cell::HandleEvent(const SDL_Event& event)
 	{
 		HandleClearedCell(event.user);
 	}
-	else if (event.type == UserEvents::BOMB_PLACED)
-	{
-		HandlePlacedBomb(event.user);
-	}
 	else if(event.type == UserEvents::GAME_LOST || 
-		event.type == UserEvents::GAME_WON)
+			event.type == UserEvents::GAME_WON)
 	{
 		if (HasBomb())
 		{
@@ -106,7 +102,6 @@ bool Cell::PlaceBomb()
 	if (hasBomb) return false;
 
 	hasBomb = true;
-	ReportEvent(UserEvents::BOMB_PLACED);
 	return true;
 }
 
@@ -117,16 +112,11 @@ bool Cell::IsAdjacent(Cell* other) const
 		std::abs(GetCol() - other->GetCol()) <= 1;
 }
 
-void Cell::HandlePlacedBomb(const SDL_UserEvent& event)
+void Cell::PlaceHint()
 {
-	Cell* bombCell = static_cast<Cell*>(event.data1);
-
-	if (IsAdjacent(bombCell))
-	{
-		++adjacentBombs;
-		text->SetText(std::to_string(adjacentBombs),
-				Config::TEXT_COLORS[adjacentBombs]);
-	}
+	++adjacentBombs;
+	text->SetText(std::to_string(adjacentBombs),
+		Config::TEXT_COLORS[adjacentBombs]);
 }
 
 void Cell::HandleClearedCell(const SDL_UserEvent& event)

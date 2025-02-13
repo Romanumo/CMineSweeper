@@ -11,13 +11,12 @@
 namespace UserEvents 
 {
 	inline Uint32 CELL_CLEARED = SDL_RegisterEvents(1);
-	inline Uint32 BOMB_PLACED = SDL_RegisterEvents(1);
+	inline Uint32 FLAG_PLACED = SDL_RegisterEvents(1);
+	inline Uint32 FLAG_CLEARED = SDL_RegisterEvents(1);
+
 	inline Uint32 GAME_WON = SDL_RegisterEvents(1);
 	inline Uint32 GAME_LOST = SDL_RegisterEvents(1);
 	inline Uint32 NEW_GAME = SDL_RegisterEvents(1);
-
-	inline Uint32 FLAG_PLACED = SDL_RegisterEvents(1);
-	inline Uint32 FLAG_CLEARED = SDL_RegisterEvents(1);
 }
 
 namespace Config

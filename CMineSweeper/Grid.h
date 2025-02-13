@@ -31,6 +31,8 @@ public:
 				cell->SetAsChildOf(this);
 			}
 		}
+
+		PlaceBombs();
 	}
 
 	void Render(SDL_Surface* surface) override
@@ -45,8 +47,6 @@ public:
 	{
 		if (event.type == UserEvents::CELL_CLEARED)
 		{
-			if (cellsToClear == 0) PlaceBombs();
-
 			HandleCellCleared(event.user);
 		}
 		if (event.type == UserEvents::NEW_GAME)
@@ -60,6 +60,7 @@ public:
 			}
 
 			RefreshGrid();
+			PlaceBombs();
 		}
 
 		for (Component* child : GetChildren())
@@ -71,6 +72,9 @@ public:
 private:
 	//0 refers to no bombs have been planted
 	int cellsToClear = 0;
+
+	//Events to be subscribed
+	//On Flags
 
 	void RefreshGrid()
 	{
@@ -93,9 +97,40 @@ private:
 				if (cell->PlaceBomb())
 				{
 					--bombsToPlace;
+					SetBombHints(*cell);
 				}
 			}
 		}
+	}
+
+	void SetBombHints(const Cell& bombCell)
+	{
+		std::vector<Cell*> bombNeighbors = GetNeigborCells(bombCell);
+		for (Cell* cell : bombNeighbors)
+		{
+			cell->PlaceHint();
+		}
+	}
+
+	std::vector<Cell*> GetNeigborCells(const Cell& cell)
+	{
+		std::vector<Cell*> neighbors;
+		for (int col = cell.GetCol() - 1; col < cell.GetCol() + 1;col++)
+		{
+			for (int row = cell.GetRow() - 1; row < cell.GetRow() + 1;row++)
+			{
+				if (col == cell.GetCol() && row == cell.GetRow()) continue;
+				if (col < 1 || col > Config::GRID_COLUMNS) continue;
+				if (row < 1 || row > Config::GRID_ROWS) continue;
+
+				if (Cell* cell = dynamic_cast<Cell*>(GetChildren()[(row-1) * Config::GRID_COLUMNS + (col-1)]))
+				{
+					neighbors.push_back(cell);
+				}
+			}
+		}
+
+		return neighbors;
 	}
 
 	void HandleCellCleared(const SDL_UserEvent& event)

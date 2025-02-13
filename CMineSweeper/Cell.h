@@ -26,6 +26,8 @@ public:
 	[[nodiscard]]
 	int GetCol() const { return col; }
 
+	void PlaceHint();
+
 private:
 	int row;
 	int col;
@@ -36,9 +38,8 @@ private:
 	bool hasFlag = false;
 
 	void ReportEvent(uint32_t eventType);
-	bool IsAdjacent(Cell* cell) const;
 
-	void HandlePlacedBomb(const SDL_UserEvent& event);
+	bool IsAdjacent(Cell* cell) const;
 	void HandleClearedCell(const SDL_UserEvent& event);
 	int adjacentBombs = 0;
 
