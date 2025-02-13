@@ -5,11 +5,8 @@
 #include "Globals.h"
 
 //Problems:
-//What about a situation when the parent dies?
-//Does the child die with him?
-//What about layout, it can have an reference created to an object
-//Does it have to delete all the object when that layout dies?
-//You need to free space after all
+//When Minesweeper is completed
+//Rework your code again and now implement a unique pointers
 
 namespace Engine
 {
@@ -34,7 +31,7 @@ namespace Engine
 		virtual void Render(SDL_Surface* surface) = 0;
 		virtual void HandleEvent(const SDL_Event& event) = 0;
 
-		virtual ~Component() = default;
+		virtual ~Component();
 
 	protected:
 		virtual void HandleChildPosition();

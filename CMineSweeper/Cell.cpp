@@ -5,27 +5,19 @@
 //But every CELL has A BOMB IMAGE
 Cell::Cell(int x, int y, int w, int h, int row, int col) :
 	Button{ x, y, w, h }, row(row), col(col),
-	bombImage{ 0,0 , w, h, Config::BOMB_IMAGE },
-	flagImage{ 0,0, w, h, Config::FLAG_IMAGE },
-	text{ 0,0, w, h,
+	bombImage{ new Engine::Image{0,0 , w, h, Config::BOMB_IMAGE} },
+	flagImage{ new Engine::Image{0,0, w, h, Config::FLAG_IMAGE} },
+	text{ new Engine::Text{0,0, w, h,
 	std::to_string(adjacentBombs),
-	Config::TEXT_COLORS[adjacentBombs] }
+	Config::TEXT_COLORS[adjacentBombs]} }
 {
-	bombImage.SetAsChildOf(this);
-	flagImage.SetAsChildOf(this);
-	text.SetAsChildOf(this);
+	bombImage->SetAsChildOf(this);
+	flagImage->SetAsChildOf(this);
+	text->SetAsChildOf(this);
 };
 
 void Cell::HandleEvent(const SDL_Event& event) 
 {
-#ifdef SHOW_DEBUG_HELPERS
-	if (event.type == SDL_MOUSEBUTTONDOWN)
-	{
-		std::cout << "Cell y: " << GetAbsTf()->w <<
-			", Bomb y: " << bombImage.GetAbsTf()->w << std::endl;
-	}
-#endif
-
 	if (event.type == UserEvents::CELL_CLEARED)
 	{
 		HandleClearedCell(event.user);
@@ -55,24 +47,24 @@ void Cell::Render(SDL_Surface* surface)
 	Button::Render(surface);
 	if (isCleared && hasBomb)
 	{
-		bombImage.Render(surface);
+		bombImage->Render(surface);
 	}
 	else if (hasFlag)
 	{
-		flagImage.Render(surface);
+		flagImage->Render(surface);
 	}
 	else if (isCleared && adjacentBombs > 0)
 	{
-		text.Render(surface);
+		text->Render(surface);
 	}
 #ifdef SHOW_DEBUG_HELPERS
 	else if (hasBomb)
 	{
-		bombImage.Render(surface);
+		bombImage->Render(surface);
 	}
 	else if (adjacentBombs > 0)
 	{
-		text.Render(surface);
+		text->Render(surface);
 	}
 #endif // SHOW_DEBUG_HELPERS
 }
@@ -130,7 +122,7 @@ void Cell::HandlePlacedBomb(const SDL_UserEvent& event)
 	if (IsAdjacent(bombCell))
 	{
 		++adjacentBombs;
-		text.SetText(std::to_string(adjacentBombs),
+		text->SetText(std::to_string(adjacentBombs),
 				Config::TEXT_COLORS[adjacentBombs]);
 	}
 }

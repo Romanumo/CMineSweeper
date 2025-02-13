@@ -8,15 +8,15 @@ class NewGameButton : public Engine::Button
 public:
 	NewGameButton(int x, int y, int w, int h) :
 		Button{ x, y, w, h },
-		text{ x, y, w, h, "New Game", {}, 40 } 
+		text{ new Engine::Text{x, y, w, h, "New Game", {}, 40 } }
 	{
-		text.SetAsChildOf(this);
+		text->SetAsChildOf(this);
 	};
 
 	void Render(SDL_Surface* surface) override
 	{
 		Button::Render(surface);
-		text.Render(surface);
+		text->Render(surface);
 	}
 
 	void HandleLeftClick() override
@@ -26,5 +26,5 @@ public:
 	}
 
 private:
-	Engine::Text text;
+	Engine::Text* text;
 };

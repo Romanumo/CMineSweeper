@@ -3,6 +3,8 @@
 #include "Engine/Image.h"
 #include "Engine/Text.h"
 
+//Make image, text and another image  a pointers
+
 class Cell : public Engine::Button
 {
 public:
@@ -42,7 +44,7 @@ private:
 	void HandleClearedCell(const SDL_UserEvent& event);
 	int adjacentBombs = 0;
 
-	Engine::Image flagImage;
-	Engine::Image bombImage;
-	Engine::Text text;
+	Engine::Image* flagImage;
+	Engine::Image* bombImage;
+	Engine::Text* text;
 };

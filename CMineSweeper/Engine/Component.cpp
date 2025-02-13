@@ -12,6 +12,18 @@ Component::Component(int x, int y, int w, int h) :
 	UpdateTransform();
 }
 
+Component::~Component()
+{
+	if (children.size() < 1) return;
+
+	for(Component* child : children)
+	{
+		std::cout << this->GetName() << " deletes " 
+			<< child->GetName() << std::endl;
+		delete child;
+	}
+}
+
 #pragma region Positioning
 
 void Component::SetRelPosition(int x, int y)
