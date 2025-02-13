@@ -114,6 +114,8 @@ bool Cell::IsAdjacent(Cell* other) const
 
 void Cell::PlaceHint()
 {
+	if (hasBomb) return;
+
 	++adjacentBombs;
 	text->SetText(std::to_string(adjacentBombs),
 		Config::TEXT_COLORS[adjacentBombs]);

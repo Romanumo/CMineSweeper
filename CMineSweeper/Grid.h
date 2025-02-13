@@ -18,21 +18,19 @@ public:
 		SetRelSize(GRID_COLUMNS * spacing - PADDING,
 					GRID_ROWS * spacing - PADDING);
 
-		for (int col = 0; col < GRID_COLUMNS;col++)
+		for (int row = 0; row < GRID_ROWS;row++)
 		{
-			for (int row = 0; row < GRID_ROWS;row++)
+			for (int col = 0; col < GRID_COLUMNS;col++)
 			{
 				Cell* cell  = new Cell(
 					col * spacing,
 					row * spacing,
-					CELL_SIZE, CELL_SIZE, row + 1, col + 1
+					CELL_SIZE, CELL_SIZE, row, col
 				);
 
 				cell->SetAsChildOf(this);
 			}
 		}
-
-		PlaceBombs();
 	}
 
 	void Render(SDL_Surface* surface) override
@@ -47,20 +45,20 @@ public:
 	{
 		if (event.type == UserEvents::CELL_CLEARED)
 		{
-			HandleCellCleared(event.user);
+			auto* cell = static_cast<Cell*>(event.user.data1);
+			if (cellsToClear == 0) PlaceBombs(*cell);
+
+			HandleCellCleared(*cell);
 		}
 		if (event.type == UserEvents::NEW_GAME)
 		{
-			for (Component* child : GetChildren())
+			for (int i = 0;i < GetChildren().size();i++)
 			{
-				if (Cell* cell = dynamic_cast<Cell*>(child))
-				{
-					cell->Reset();		
-				}
+				Cell* cell = GetChildToCell(i);
+				cell->Reset();
 			}
 
 			RefreshGrid();
-			PlaceBombs();
 		}
 
 		for (Component* child : GetChildren())
@@ -70,37 +68,51 @@ public:
 	}
 
 private:
-	//0 refers to no bombs have been planted
 	int cellsToClear = 0;
 
-	//Events to be subscribed
-	//On Flags
+	//Manage subscription system for triggering of certain events
+	//So that not every cell look for events
+	//But the grid sends them to needed cells
 
 	void RefreshGrid()
 	{
 		cellsToClear = 0;
 	}
 
-	void PlaceBombs()
+	void PlaceBombs(Cell& openedCell)
 	{
 		int bombsToPlace = Config::BOMB_COUNT;
 		cellsToClear =
 			Config::GRID_COLUMNS * Config::GRID_ROWS - Config::BOMB_COUNT;
+
+		std::vector<Cell*> safeCells = GetNeigborCells(openedCell);
+		safeCells.push_back(&openedCell);
 
 		while (bombsToPlace > 0)
 		{
 			const size_t randomIndex =
 				Engine::Random::Int(0, GetChildren().size() - 1);
 
-			if (Cell* cell = dynamic_cast<Cell*>(GetChildren()[randomIndex]))
+			Cell* bombCell = GetChildToCell(randomIndex);
+
+			if (IsCellInsideArea(safeCells, bombCell)) continue;
+
+			if (bombCell->PlaceBomb())
 			{
-				if (cell->PlaceBomb())
-				{
-					--bombsToPlace;
-					SetBombHints(*cell);
-				}
+				--bombsToPlace;
+				SetBombHints(*bombCell);
 			}
 		}
+	}
+
+	bool IsCellInsideArea(std::vector<Cell*> area, Cell* cell)
+	{
+		for (Cell* areaCell : area)
+		{
+			if (areaCell == cell) return true;
+		}
+
+		return false;
 	}
 
 	void SetBombHints(const Cell& bombCell)
@@ -115,28 +127,40 @@ private:
 	std::vector<Cell*> GetNeigborCells(const Cell& cell)
 	{
 		std::vector<Cell*> neighbors;
-		for (int col = cell.GetCol() - 1; col < cell.GetCol() + 1;col++)
-		{
-			for (int row = cell.GetRow() - 1; row < cell.GetRow() + 1;row++)
-			{
-				if (col == cell.GetCol() && row == cell.GetRow()) continue;
-				if (col < 1 || col > Config::GRID_COLUMNS) continue;
-				if (row < 1 || row > Config::GRID_ROWS) continue;
+		int cellRow = cell.GetRow();
+		int cellCol = cell.GetCol();
 
-				if (Cell* cell = dynamic_cast<Cell*>(GetChildren()[(row-1) * Config::GRID_COLUMNS + (col-1)]))
-				{
-					neighbors.push_back(cell);
-				}
+		for (int row = cellRow - 1; row <= cellRow + 1;row++)
+		{
+			if (row < 0 || row >= Config::GRID_ROWS) continue;
+
+			for (int col = cellCol - 1; col <= cellCol + 1;col++)
+			{
+				if (col < 0 || col >= Config::GRID_COLUMNS) continue;
+				if (col == cellCol && row == cellRow) continue;
+
+				Cell* neighbor = GetChildToCell(row * Config::GRID_COLUMNS + col);
+				neighbors.push_back(neighbor);
 			}
 		}
 
 		return neighbors;
 	}
 
-	void HandleCellCleared(const SDL_UserEvent& event)
+	Cell* GetChildToCell(int index)
 	{
-		auto* cell = static_cast<Cell*>(event.data1);
-		if (cell->HasBomb())
+		if (Cell* cell = dynamic_cast<Cell*>(GetChildren()[index]))
+		{
+			return cell;
+		}
+
+		std::cout << "Cannot convert component to cell" << std::endl;
+		return nullptr;
+	}
+
+	void HandleCellCleared(const Cell& openedCell)
+	{
+		if (openedCell.HasBomb())
 		{
 			SDL_Event gameLost{UserEvents::GAME_LOST};
 			SDL_PushEvent(&gameLost);
