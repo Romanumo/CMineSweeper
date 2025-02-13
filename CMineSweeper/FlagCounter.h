@@ -8,6 +8,9 @@
 #include "Engine/Text.h"
 #include "Engine/Row.h"
 
+
+//Flag Counter should directly observe grid
+
 class FlagCounter : public Engine::Rectangle
 {
 public:
@@ -37,11 +40,6 @@ public:
 
     void HandleEvent(const SDL_Event& event) 
     {
-        /*if (event.type == SDL_MOUSEMOTION)
-        {
-            SetRelPosition(event.motion.x, event.motion.y);
-        }*/
-
         if (event.type == UserEvents::FLAG_PLACED) 
         {
             --flagsAvailable;

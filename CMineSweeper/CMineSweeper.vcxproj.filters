@@ -39,6 +39,9 @@
     <ClCompile Include="Engine\Component.cpp">
       <Filter>Header Files\Engine\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UI.h">
