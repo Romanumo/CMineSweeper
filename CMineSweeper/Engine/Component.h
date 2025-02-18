@@ -5,8 +5,6 @@
 #include "Globals.h"
 
 //Improvements:
-//Reduced Event Traffic
-//Pooling Image Data
 //Sounds system	
 
 //When Minesweeper is completed:
@@ -36,6 +34,8 @@ namespace Engine
 		virtual void HandleEvent(const SDL_Event& event) = 0;
 
 		virtual ~Component();
+		Component(const Component&) = delete;
+		Component& operator=(const Component&) = delete;
 
 	protected:
 		virtual void HandleChildPosition();

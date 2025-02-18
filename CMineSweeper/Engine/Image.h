@@ -2,6 +2,7 @@
 #include <SDL_image.h>
 #include <string>
 #include "Component.h"
+#include "ImageAtlas.h"
 
 #include "Globals.h"
 
@@ -14,11 +15,7 @@ namespace Engine
 			const std::string& file) :
 			Component{ x, y, w, h }
 		{
-			imageSurface = IMG_Load(file.c_str());
-
-			#ifdef SHOW_DEBUG_HELPERS
-			Utils::CheckSDLErrors("IMG_Load");
-			#endif // SHOW_DEBUG_HELPERS
+			imageSurface = ImageAtlas::GetInstance().GetImage(file);
 		}
 
 		void Render(SDL_Surface* destSurface) override
