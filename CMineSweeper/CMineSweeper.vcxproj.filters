@@ -95,5 +95,8 @@
     <ClInclude Include="Engine\Layout.h">
       <Filter>Header Files\Engine\Layout</Filter>
     </ClInclude>
+    <ClInclude Include="EventObservers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

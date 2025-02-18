@@ -2,14 +2,10 @@
 #include <string>
 
 #include "Engine/Globals.h"
-
 #include "Engine/Rectangle.h"
 #include "Engine/Image.h"
 #include "Engine/Text.h"
 #include "Engine/Row.h"
-
-
-//Flag Counter should directly observe grid
 
 class FlagCounter : public Engine::Rectangle
 {
@@ -38,26 +34,9 @@ public:
         layout->Render(surface);
     }
 
-    void HandleEvent(const SDL_Event& event) 
+    void Update(int flags) 
     {
-        if (event.type == UserEvents::FLAG_PLACED) 
-        {
-            --flagsAvailable;
-        }
-        else if (event.type == UserEvents::FLAG_CLEARED) 
-        {
-            ++flagsAvailable;
-        }
-        else if (event.type == UserEvents::GAME_WON)
-        {
-            flagsAvailable = 0;
-        }
-        else if (event.type == UserEvents::NEW_GAME) 
-        {
-            flagsAvailable = Config::BOMB_COUNT;
-        }
-        else { return; }
-
+        flagsAvailable = flags;
         text->SetText(std::to_string(flagsAvailable));
     }
 

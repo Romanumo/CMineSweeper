@@ -25,10 +25,11 @@ Grid::Grid(int x, int y) : Component(x, y, 0, 0)
 			Cell* cell = new Cell(
 				col * spacing,
 				row * spacing,
-				CELL_SIZE, CELL_SIZE, row, col
+				CELL_SIZE, CELL_SIZE, row, col, this
 			);
 
 			cell->SetAsChildOf(this);
+			AddSubscriber(cell);
 		}
 	}
 }
@@ -50,21 +51,17 @@ void Grid::HandleEvent(const SDL_Event& event)
 
 		HandleCellCleared(*cell);
 	}
-	if (event.type == UserEvents::NEW_GAME)
-	{
-		for (int i = 0;i < GetChildren().size();i++)
-		{
-			Cell* cell = GetChildToCell(i);
-			cell->Reset();
-		}
-
-		RefreshGrid();
-	}
+	else if (event.type == UserEvents::NEW_GAME) RefreshGrid();
 
 	for (Component* child : GetChildren())
 	{
 		child->HandleEvent(event);
 	}
+}
+
+void Grid::SetFlagCounter(FlagCounter* counter)
+{
+	this->flagCounter - counter;
 }
 
 #pragma endregion
@@ -73,7 +70,14 @@ void Grid::HandleEvent(const SDL_Event& event)
 
 void Grid::RefreshGrid()
 {
+	for (int i = 0;i < GetChildren().size();i++)
+	{
+		Cell* cell = GetChildToCell(i);
+		cell->Reset();
+	}
+
 	cellsToClear = 0;
+	flagsAvailable = Config::BOMB_COUNT;
 }
 
 void Grid::PlaceBombs(Cell& openedCell)
@@ -109,6 +113,24 @@ void Grid::SetBombHints(const Cell& bombCell)
 	{
 		cell->PlaceHint();
 	}
+}
+
+bool Grid::ReceiveFlagPlacement()
+{
+	if (flagsAvailable > 0)
+	{
+		flagsAvailable--;
+		flagCounter->Update(flagsAvailable);
+		return true;
+	}
+
+	return false;
+}
+
+void Grid::ReceiveFlagRemoval()
+{
+	flagsAvailable++;
+	flagCounter->Update(flagsAvailable);
 }
 
 void Grid::HandleCellCleared(const Cell& openedCell)

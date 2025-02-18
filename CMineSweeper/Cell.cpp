@@ -1,17 +1,21 @@
 #include "Cell.h"
 #include <iostream>
 #include "Engine/Globals.h"
+#include "Grid.h"
 
 //But every CELL has A BOMB IMAGE
-//Make Cell an observer instead of relying on user events
 
-Cell::Cell(int x, int y, int w, int h, int row, int col) :
+Cell::Cell(int x, int y, int w, int h, int row, int col, Grid* parent) :
 	Button{ x, y, w, h }, row(row), col(col),
 	bombImage{ new Engine::Image{0,0 , w, h, Config::BOMB_IMAGE} },
 	flagImage{ new Engine::Image{0,0, w, h, Config::FLAG_IMAGE} },
 	text{ new Engine::Text{0,0, w, h,
 	std::to_string(adjacentBombs),
-	Config::TEXT_COLORS[adjacentBombs]} }
+	Config::TEXT_COLORS[adjacentBombs]} },
+	gridParent(parent), 
+	EventListener(static_cast<EventManager*>(parent), 
+		std::vector<Uint32>{UserEvents::NEW_GAME, UserEvents::GAME_LOST,
+		UserEvents::CELL_CLEARED})
 {
 	bombImage->SetAsChildOf(this);
 	flagImage->SetAsChildOf(this);
@@ -85,9 +89,19 @@ void Cell::HandleLeftClick()
 
 void Cell::HandleRightClick()
 {
-	hasFlag = !hasFlag;
+	if (gridParent->ReceiveFlagPlacement() && !hasFlag)
+	{
+		hasFlag = !hasFlag;
+	}
+	else if(hasFlag)
+	{
+		gridParent->ReceiveFlagRemoval();
+	}
+}
 
-	ReportEvent((hasFlag) ? UserEvents::FLAG_PLACED : UserEvents::FLAG_CLEARED);
+void ReceiveNotification(Uint32 flag)
+{
+
 }
 
 void Cell::ReportEvent(uint32_t eventType)

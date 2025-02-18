@@ -4,13 +4,17 @@
 #include "Engine/Globals.h"
 #include "Engine/Random.h"
 #include "Engine/Component.h"
+#include "FlagCounter.h"
+#include "EventObservers.h"
 #include "Cell.h"
 
-//Manage subscription system for triggering of certain events
-//So that not every cell look for events
-//But the grid sends them to needed cells
+//Flag observer of grid. Grid notifies Flag. Use asbtract class
 
-class Grid : public Engine::Component
+//Cells observer of grid. Grid notifies cells of certain userEvents happening
+//Cells can subscribe to certain events
+//Make a separate event receiver and notifier abstract classes/interfaces?
+
+class Grid : public Engine::Component, public EventManager
 {
 public:
 	Grid(int x, int y);
@@ -18,8 +22,14 @@ public:
 	void Render(SDL_Surface* surface) override;
 	void HandleEvent(const SDL_Event& event) override;
 
+	bool ReceiveFlagPlacement();
+	void ReceiveFlagRemoval();
+	void SetFlagCounter(FlagCounter* counter);
+
 private:
 	int cellsToClear = 0;
+	int flagsAvailable = Config::BOMB_COUNT;
+	FlagCounter* flagCounter;
 
 	void RefreshGrid();
 

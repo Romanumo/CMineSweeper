@@ -6,13 +6,10 @@
 
 //Improvements:
 //Reduced Event Traffic
-//--Make Cell an observer of grid
-//Gameplay Improvements
 //Pooling Image Data
-//Timer and high score
 //Sounds system	
 
-//When Minesweeper is completed
+//When Minesweeper is completed:
 //Rework your code again and now implement a unique pointers
 
 namespace Engine

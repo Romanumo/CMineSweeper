@@ -144,6 +144,7 @@
     <ClInclude Include="Engine\Column.h" />
     <ClInclude Include="Engine\Layout.h" />
     <ClInclude Include="Engine\Row.h" />
+    <ClInclude Include="EventObservers.h" />
     <ClInclude Include="FlagCounter.h" />
     <ClInclude Include="Engine\Globals.h" />
     <ClInclude Include="Grid.h" />

@@ -2,11 +2,14 @@
 #include "Engine/Button.h"
 #include "Engine/Image.h"
 #include "Engine/Text.h"
+#include "EventObservers.h"
 
-class Cell : public Engine::Button
+class Grid;
+
+class Cell : public Engine::Button, public EventListener
 {
 public:
-	Cell(int x, int y, int w, int h, int row, int col);
+	Cell(int x, int y, int w, int h, int row, int col, Grid* parent);
 
 	void HandleEvent(const SDL_Event& event) override;
 	void Render(SDL_Surface* surface) override;
@@ -14,6 +17,7 @@ public:
 	void HandleLeftClick() override;
 	void HandleRightClick() override;
 
+	void ReceiveNotification(Uint32 flag) override;
 	bool PlaceBomb();
 	void Reset();
 
@@ -31,6 +35,7 @@ public:
 private:
 	int row;
 	int col;
+	Grid* gridParent;
 
 	void ClearCell();
 	bool isCleared = false;
