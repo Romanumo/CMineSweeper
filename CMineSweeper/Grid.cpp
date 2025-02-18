@@ -9,7 +9,7 @@
 
 #pragma region Public
 
-Grid::Grid(int x, int y) : Component(x, y, 0, 0)
+Grid::Grid(int x, int y, FlagCounter* flagCounter) : Component(x, y, 0, 0)
 {
 	using namespace Config;
 	ReserveChildrenSize(GRID_COLUMNS * GRID_ROWS);
@@ -32,6 +32,8 @@ Grid::Grid(int x, int y) : Component(x, y, 0, 0)
 			AddSubscriber(cell);
 		}
 	}
+
+	SetFlagCounter(flagCounter);
 }
 
 void Grid::Render(SDL_Surface* surface)
@@ -53,15 +55,17 @@ void Grid::HandleEvent(const SDL_Event& event)
 	}
 	else if (event.type == UserEvents::NEW_GAME) RefreshGrid();
 
-	for (Component* child : GetChildren())
+	NotifySubsribers(event);
+
+	for (Component* component : GetChildren())
 	{
-		child->HandleEvent(event);
+		component->HandleEvent(event);
 	}
 }
 
 void Grid::SetFlagCounter(FlagCounter* counter)
 {
-	this->flagCounter - counter;
+	this->flagCounter = counter;
 }
 
 #pragma endregion
@@ -78,6 +82,7 @@ void Grid::RefreshGrid()
 
 	cellsToClear = 0;
 	flagsAvailable = Config::BOMB_COUNT;
+	flagCounter->Update(flagsAvailable);
 }
 
 void Grid::PlaceBombs(Cell& openedCell)

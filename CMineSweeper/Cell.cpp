@@ -13,35 +13,34 @@ Cell::Cell(int x, int y, int w, int h, int row, int col, Grid* parent) :
 	std::to_string(adjacentBombs),
 	Config::TEXT_COLORS[adjacentBombs]} },
 	gridParent(parent), 
-	EventListener(static_cast<EventManager*>(parent), 
-		std::vector<Uint32>{UserEvents::NEW_GAME, UserEvents::GAME_LOST,
+	EventListener(std::vector<Uint32>
+		{UserEvents::NEW_GAME, 
+		UserEvents::GAME_LOST,
 		UserEvents::CELL_CLEARED})
 {
 	bombImage->SetAsChildOf(this);
 	flagImage->SetAsChildOf(this);
 	text->SetAsChildOf(this);
+	this->Subscribe(static_cast<EventManager*>(parent));
 };
 
-void Cell::HandleEvent(const SDL_Event& event) 
+void Cell::ReceiveNotification(const SDL_Event& event)
 {
 	if (event.type == UserEvents::CELL_CLEARED)
 	{
 		HandleClearedCell(event.user);
 	}
-	else if(event.type == UserEvents::GAME_LOST || 
-			event.type == UserEvents::GAME_WON)
+	else if (event.type == UserEvents::GAME_LOST || event.type == UserEvents::GAME_WON)
 	{
 		if (HasBomb())
 		{
-			SetColor((event.type == UserEvents::GAME_LOST) ? 
-					Config::BUTTON_FAILURE_COLOR : Config::BUTTON_SUCCESS_COLOR);
+			SetColor((event.type == UserEvents::GAME_LOST) ?
+				Config::BUTTON_FAILURE_COLOR : Config::BUTTON_SUCCESS_COLOR);
 			isCleared = true;
 		}
 
 		SetEnabled(false);
 	}
-
-	Button::HandleEvent(event);
 }
 
 void Cell::Render(SDL_Surface* surface)
@@ -89,19 +88,15 @@ void Cell::HandleLeftClick()
 
 void Cell::HandleRightClick()
 {
-	if (gridParent->ReceiveFlagPlacement() && !hasFlag)
+	if (!hasFlag && gridParent->ReceiveFlagPlacement())
 	{
-		hasFlag = !hasFlag;
+		hasFlag = true;
 	}
 	else if(hasFlag)
 	{
 		gridParent->ReceiveFlagRemoval();
+		hasFlag = false;
 	}
-}
-
-void ReceiveNotification(Uint32 flag)
-{
-
 }
 
 void Cell::ReportEvent(uint32_t eventType)

@@ -42,6 +42,9 @@
     <ClCompile Include="Grid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EventListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UI.h">
@@ -95,7 +98,10 @@
     <ClInclude Include="Engine\Layout.h">
       <Filter>Header Files\Engine\Layout</Filter>
     </ClInclude>
-    <ClInclude Include="EventObservers.h">
+    <ClInclude Include="EventManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventListener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

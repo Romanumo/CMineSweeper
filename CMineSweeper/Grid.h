@@ -5,10 +5,9 @@
 #include "Engine/Random.h"
 #include "Engine/Component.h"
 #include "FlagCounter.h"
-#include "EventObservers.h"
+#include "EventManager.h"
 #include "Cell.h"
 
-//Flag observer of grid. Grid notifies Flag. Use asbtract class
 
 //Cells observer of grid. Grid notifies cells of certain userEvents happening
 //Cells can subscribe to certain events
@@ -17,7 +16,7 @@
 class Grid : public Engine::Component, public EventManager
 {
 public:
-	Grid(int x, int y);
+	Grid(int x, int y, FlagCounter* flagCounter);
 
 	void Render(SDL_Surface* surface) override;
 	void HandleEvent(const SDL_Event& event) override;
