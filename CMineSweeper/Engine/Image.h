@@ -6,6 +6,8 @@
 
 #include "Globals.h"
 
+//Since IMageAtlas you acn change pointer into a shared pointer
+
 namespace Engine
 {
 	class Image : public Component
@@ -15,15 +17,28 @@ namespace Engine
 			const std::string& file) :
 			Component{ x, y, w, h }
 		{
-			imageSurface = ImageAtlas::GetInstance().GetImage(file);
+			LoadImage(file);
 		}
+
+		virtual void HandleEvent(const SDL_Event& event) override {}
 
 		void Render(SDL_Surface* destSurface) override
 		{
 			SDL_BlitScaled(imageSurface, nullptr, destSurface, GetAbsTf());
 		}
 
-		~Image()
+		void ChangeImage(const std::string& filePath)
+		{
+			FreeImage();
+			LoadImage(filePath);
+		}
+
+		~Image() { FreeImage(); }
+
+	private:
+		SDL_Surface* imageSurface = nullptr;
+
+		void FreeImage()
 		{
 			if (imageSurface)
 			{
@@ -31,9 +46,9 @@ namespace Engine
 			}
 		}
 
-		virtual void HandleEvent(const SDL_Event& event) override {}
-
-	private:
-		SDL_Surface* imageSurface = nullptr;
+		void LoadImage(const std::string& filePath)
+		{
+			imageSurface = ImageAtlas::GetInstance().GetImage(filePath);
+		}
 	};
 }
