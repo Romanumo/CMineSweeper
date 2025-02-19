@@ -8,9 +8,7 @@
 #include "EventManager.h"
 #include "Cell.h"
 
-//Cells observer of grid. Grid notifies cells of certain userEvents happening
-//Cells can subscribe to certain events
-//Make a separate event receiver and notifier abstract classes/interfaces?
+//Grid can load all needed numberImages
 
 class Grid : public Engine::Component, public EventManager
 {

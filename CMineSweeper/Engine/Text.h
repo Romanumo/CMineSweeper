@@ -53,6 +53,20 @@ namespace Engine
 			if (textSurface) { SDL_FreeSurface(textSurface); }
 		}
 
+		static SDL_Surface* SaveTextAsImage(
+			const std::string& fontPath, int fontSize, 
+			const std::string& text, SDL_Color color) 
+		{
+			TTF_Font* savedFont = TTF_OpenFont(fontPath.c_str(), fontSize);
+			SDL_Surface* textSurface = TTF_RenderUTF8_Blended(savedFont, text.c_str(), color);
+			TTF_CloseFont(savedFont);
+
+			if(textSurface)return textSurface;
+			
+			std::cout << "Problem saving text" << std::endl;
+			return nullptr;
+		}
+
 		virtual void HandleEvent(const SDL_Event& event) override {}
 
 	protected:
@@ -65,6 +79,7 @@ namespace Engine
 	private:
 		SDL_Surface* textSurface = nullptr;
 		TTF_Font* font = nullptr;
+
 		SDL_Rect textPos{ 0,0,0,0 };
 		SDL_Color textColor{ 0,0,0,255 };
 

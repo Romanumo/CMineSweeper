@@ -27,7 +27,7 @@ namespace Engine
 
 		void SetImage(const std::string& filePath)
 		{
-			imageSurface = ResourceManager<SDL_Surface>::GetInstance().Get(filePath, LoadImage);
+			imageSurface = ResourceManager<SDL_Surface>::GetInstance().GetByPath(filePath, LoadImage);
 		}
 
 	private:

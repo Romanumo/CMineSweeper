@@ -20,7 +20,7 @@ public:
 	ResourceManager& operator=(const ResourceManager&) = delete;
 
 	template <typename Load>
-	std::shared_ptr<Resource> Get(const std::string& path, Load loadFunction)
+	std::shared_ptr<Resource> GetByPath(const std::string& path, Load loadFunction)
 	{
 		auto image = resourcePool.find(path);
 		if (image != resourcePool.end()) return image->second;
@@ -29,6 +29,19 @@ public:
 		if (resource) resourcePool[path] = resource;
 
 		return resource;
+	}
+
+	std::shared_ptr<Resource> GetByName(const std::string& assetName)
+	{
+		auto image = resourcePool.find(assetName);
+		if (image != resourcePool.end()) return image->second;
+
+		return nullptr;
+	}
+
+	void AddAnAsset(const std::string& assetName, std::shared_ptr<Resource> asset)
+	{
+		resourcePool[assetName] = asset;
 	}
 
 	void FreeAll()
