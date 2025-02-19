@@ -143,6 +143,7 @@
     <ClInclude Include="Engine\Button.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Engine\Column.h" />
+    <ClInclude Include="Engine\ResourceManager.h" />
     <ClInclude Include="Engine\Layout.h" />
     <ClInclude Include="Engine\Row.h" />
     <ClInclude Include="EventListener.h" />
