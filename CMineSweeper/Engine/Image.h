@@ -2,11 +2,9 @@
 #include <SDL_image.h>
 #include <string>
 #include "Component.h"
-#include "ImageAtlas.h"
+#include "ResourceManager.h"
 
 #include "Globals.h"
-
-//Since IMageAtlas you acn change pointer into a shared pointer
 
 namespace Engine
 {
@@ -17,38 +15,36 @@ namespace Engine
 			const std::string& file) :
 			Component{ x, y, w, h }
 		{
-			LoadImage(file);
+			SetImage(file);
 		}
 
 		virtual void HandleEvent(const SDL_Event& event) override {}
 
 		void Render(SDL_Surface* destSurface) override
 		{
-			SDL_BlitScaled(imageSurface, nullptr, destSurface, GetAbsTf());
+			SDL_BlitScaled(imageSurface.get(), nullptr, destSurface, GetAbsTf());
 		}
 
-		void ChangeImage(const std::string& filePath)
+		void SetImage(const std::string& filePath)
 		{
-			FreeImage();
-			LoadImage(filePath);
+			imageSurface = ResourceManager<SDL_Surface>::GetInstance().Get(filePath, LoadImage);
 		}
-
-		~Image() { FreeImage(); }
 
 	private:
-		SDL_Surface* imageSurface = nullptr;
+		std::shared_ptr<SDL_Surface> imageSurface = nullptr;
 
-		void FreeImage()
+		static std::shared_ptr<SDL_Surface> LoadImage(const std::string& filePath)
 		{
-			if (imageSurface)
+			SDL_Surface* rawSurface = IMG_Load(filePath.c_str());
+			if (!rawSurface)
 			{
-				SDL_FreeSurface(imageSurface);
-			}
-		}
+				#ifdef SHOW_DEBUG_HELPERS
+				Utils::CheckSDLErrors("IMG_Load");
+				#endif // SHOW_DEBUG_HELPERS
 
-		void LoadImage(const std::string& filePath)
-		{
-			imageSurface = ImageAtlas::GetInstance().GetImage(filePath);
+				return nullptr;
+			}
+			return std::shared_ptr<SDL_Surface>(rawSurface, SDL_FreeSurface);
 		}
 	};
 }
