@@ -69,8 +69,10 @@ namespace Config
 	inline const std::string FONT = "Assets/Rubik-SemiBold.ttf";
 	inline const std::string BOMB_IMAGE = "Assets/Bomb.png";
 	inline const std::string FLAG_IMAGE = "Assets/Flag.png";
-	inline const std::string CLICK_SOUND = "Assets/Click.mp3";
+	inline const std::string CLICK_SOUND = "Assets/Click.wav";
 	inline const std::string BCG_MUSIC = "Assets/BcgMusic.mp3";
+	inline const std::string BOMB_SOUND = "Assets/BombSound.wav";
+	inline const std::string FLAG_SOUND = "Assets/FlagSound.mp3";
 
 	//Layout
 	inline const int MAX_CHILDREN = 20;

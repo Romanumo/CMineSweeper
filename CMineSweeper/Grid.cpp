@@ -126,6 +126,8 @@ bool Grid::ReceiveFlagPlacement()
 	{
 		flagsAvailable--;
 		flagCounter->Update(flagsAvailable);
+
+		SoundManager::GetInstance().PlaySFX(Config::FLAG_SOUND);
 		return true;
 	}
 
@@ -142,6 +144,7 @@ void Grid::HandleCellCleared(const Cell& openedCell)
 {
 	if (openedCell.HasBomb())
 	{
+		SoundManager::GetInstance().PlaySFX(Config::BOMB_SOUND);
 		SDL_Event gameLost{ UserEvents::GAME_LOST };
 		SDL_PushEvent(&gameLost);
 	}

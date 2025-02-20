@@ -84,6 +84,7 @@ void Cell::ClearCell()
 void Cell::HandleLeftClick()
 {
 	ClearCell();
+	SoundManager::GetInstance().PlaySFX(Config::CLICK_SOUND);
 }
 
 void Cell::HandleRightClick()
