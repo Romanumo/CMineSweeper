@@ -39,9 +39,15 @@ public:
 		return nullptr;
 	}
 
-	void AddAnAsset(const std::string& assetName, std::shared_ptr<Resource> asset)
+	template <typename Load>
+	std::shared_ptr<Resource> GetByName(const std::string& assetName, Load loadFunction)
 	{
+		auto image = resourcePool.find(assetName);
+		if (image != resourcePool.end()) return image->second;
+
+		std::shared_ptr<Resource> asset = loadFunction();
 		resourcePool[assetName] = asset;
+		return asset;
 	}
 
 	void FreeAll()

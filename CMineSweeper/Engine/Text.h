@@ -4,6 +4,7 @@
 #include "Globals.h"
 #include "Component.h"
 
+//Text works on an assumtion of one font
 namespace Engine
 {
 	class Text : public Component
@@ -15,19 +16,17 @@ namespace Engine
 			int fontSize = 60) : 
 			Component{x, y, w, h}, textColor(color)
 		{
-			font = TTF_OpenFont(Config::FONT.c_str(), fontSize);
+			fontID = Config::FONT + std::to_string(fontSize);
+			auto loadFont = [fontSize]() -> std::shared_ptr<TTF_Font>
+				{return LoadFont(Config::FONT, fontSize);};
 
-			#ifdef SHOW_DEBUG_HELPERS
-			Utils::CheckSDLErrors("TTF_OpenFont");
-			#endif // SHOW_DEBUG_HELPERS
+			font = ResourceManager<TTF_Font>::GetInstance().
+				GetByName(fontID, loadFont);
 
 			SetText(text);
 		}
 
-		void SetText(const std::string& text)
-		{
-			SetText(text, textColor);
-		}
+		void SetText(const std::string& text) { SetText(text, textColor); }
 
 		void SetText(const std::string& text, SDL_Color color)
 		{
@@ -38,7 +37,7 @@ namespace Engine
 			textColor = color;
 
 			//UniqueNameFormat font_text_color
-			textSurface = TTF_RenderUTF8_Blended(font, text.c_str(), color);
+			textSurface = TTF_RenderUTF8_Blended(font.get(), text.c_str(), color);
 
 			UpdateTextPosition();
 		}
@@ -46,12 +45,6 @@ namespace Engine
 		void Render(SDL_Surface* surface) override
 		{
 			SDL_BlitScaled(textSurface, nullptr, surface, &textPos);
-		}
-
-		~Text()
-		{
-			if (font) { TTF_CloseFont(font); }
-			if (textSurface) { SDL_FreeSurface(textSurface); }
 		}
 
 		static SDL_Surface* SaveTextAsImage(
@@ -70,6 +63,11 @@ namespace Engine
 
 		virtual void HandleEvent(const SDL_Event& event) override {}
 
+		~Text()
+		{
+			if (textSurface) { SDL_FreeSurface(textSurface); }
+		}
+
 	protected:
 		void HandleChildPosition() override
 		{
@@ -79,7 +77,8 @@ namespace Engine
 
 	private:
 		SDL_Surface* textSurface = nullptr;
-		TTF_Font* font = nullptr;
+		std::shared_ptr<TTF_Font> font = nullptr;
+		std::string fontID;
 
 		SDL_Rect textPos{ 0,0,0,0 };
 		SDL_Color textColor{ 0,0,0,255 };
@@ -97,6 +96,22 @@ namespace Engine
 			const int topOffset = heightDifference / 2;
 
 			textPos = { x + leftOffset, y + topOffset, w - widthDifference, h - heightDifference };
+		}
+
+		static std::shared_ptr<TTF_Font> LoadFont(const std::string& path, int fontSize)
+		{
+			TTF_Font* font = TTF_OpenFont(Config::FONT.c_str(), fontSize);
+
+			if (!font)
+			{
+				#ifdef SHOW_DEBUG_HELPERS
+				Utils::CheckSDLErrors("TTF_OpenFont");
+				#endif // SHOW_DEBUG_HELPERS
+
+				return nullptr;
+			}
+
+			return std::shared_ptr<TTF_Font>(font, TTF_CloseFont);
 		}
 	};
 }
