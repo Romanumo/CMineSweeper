@@ -30,7 +30,7 @@ namespace Engine
 
 			int xLength = GetMargin();
 
-			for (Component* component : GetChildren())
+			for (const auto& component : GetChildren())
 			{
 				component->SetRelPosition(xLength, GetMargin());
 				xLength += component->GetAbsTf()->w + GetPadding();

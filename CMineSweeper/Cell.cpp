@@ -18,9 +18,9 @@ Cell::Cell(int x, int y, int w, int h, int row, int col, Grid* parent) :
 		UserEvents::GAME_LOST,
 		UserEvents::CELL_CLEARED})
 {
-	bombImage->SetAsChildOf(this);
-	flagImage->SetAsChildOf(this);
-	text->SetAsChildOf(this);
+	this->AdoptChild(bombImage);
+	this->AdoptChild(flagImage);
+	this->AdoptChild(text);
 	this->Subscribe(static_cast<EventManager*>(parent));
 };
 

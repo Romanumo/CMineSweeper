@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <typeinfo>
 #include <string>
+#include<memory>
 #include "Globals.h"
 
 //Improvements:
@@ -9,6 +10,7 @@
 
 //When Minesweeper is completed:
 //Rework your code again and now implement a unique pointers
+//Create an add child function
 
 namespace Engine
 {
@@ -23,17 +25,16 @@ namespace Engine
 		void SetRelSize(int w, int h);
 		void SetRelPosition(int x, int y);
 
-		std::string GetName();
-		Component* GetParent();
-		const std::vector<Component*>& GetChildren();
+		std::string GetName() const;
+		Component* GetParent() const; 
+		const std::vector<std::unique_ptr<Component>>& GetChildren() const;
 
-		bool SetAsChildOf(Component* parent);
+		bool AdoptChild(Component* child);
 		void PrintFamilyTree(int spacing = 0);
 
 		virtual void Render(SDL_Surface* surface) = 0;
 		virtual void HandleEvent(const SDL_Event& event) = 0;
 
-		virtual ~Component();
 		Component(const Component&) = delete;
 		Component& operator=(const Component&) = delete;
 
@@ -41,19 +42,17 @@ namespace Engine
 		virtual void HandleChildPosition();
 
 		void ReserveChildrenSize(int reserve);
-		bool IsMyChild(Component* child) const;
-		bool IsMyRelative(Component* child);
+		bool IsMyChild(const Component& child) const;
 		bool IsWithinBounds(int x, int y) const;
 
 	private:
 		SDL_Rect absTf{ 0,0,0,0 };
 		SDL_Rect relTf = absTf;
 
-		Component* parent;
-		std::vector<Component*> children;
+		Component* parent = nullptr;
+		std::vector<std::unique_ptr<Component>> children;
 
 		void UpdateAbsTf();
 		void UpdateTransform();
-		void SetAsParentOf(Component* child);
 	};
 }

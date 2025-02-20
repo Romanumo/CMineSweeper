@@ -22,7 +22,7 @@ namespace Engine
 
 		void AddComponent(Component& child)
 		{
-			if (!child.SetAsChildOf(this)) return;
+			if (!this->AdoptChild(&child)) return;
 
 			const SDL_Rect* myRect = GetAbsTf();
 			const SDL_Rect* objRect = child.GetAbsTf();
@@ -32,7 +32,7 @@ namespace Engine
 
 		void Render(SDL_Surface* surface) override
 		{
-			for (Component* component : GetChildren())
+			for (const auto& component : GetChildren())
 			{
 				component->Render(surface);
 			}
@@ -40,7 +40,7 @@ namespace Engine
 
 		void HandleEvent(const SDL_Event& event) override
 		{
-			for (Component* component : GetChildren())
+			for (const auto& component : GetChildren())
 			{
 				component->HandleEvent(event);
 			}

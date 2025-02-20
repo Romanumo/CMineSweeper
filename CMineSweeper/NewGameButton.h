@@ -10,7 +10,7 @@ public:
 		Button{ x, y, w, h },
 		text{ new Engine::Text{x, y, w, h, "New Game", {}, 40 } }
 	{
-		text->SetAsChildOf(this);
+		this->AdoptChild(text);
 	};
 
 	void Render(SDL_Surface* surface) override

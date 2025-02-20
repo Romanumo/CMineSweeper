@@ -29,7 +29,7 @@ namespace Engine
 
 			int yLength = GetMargin();
 
-			for (Component* component : GetChildren())
+			for (const auto& component : GetChildren())
 			{
 				component->SetRelPosition(GetMargin(), yLength);
 				yLength += component->GetAbsTf()->h + GetPadding();

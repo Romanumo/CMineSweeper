@@ -25,7 +25,7 @@ public:
             image, text
             }}}
     {
-        layout->SetAsChildOf(this);
+        this->AdoptChild(layout);
     }
 
     void Render(SDL_Surface* surface) override
