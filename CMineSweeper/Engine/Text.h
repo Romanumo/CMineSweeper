@@ -13,7 +13,7 @@ namespace Engine
 		Text(int x, int y, int w, int h,
 			const std::string& text, 
 			SDL_Color color = { 0, 0,0,255 },
-			int fontSize = 60) : 
+			int fontSize = 60, bool isCached = false) : 
 			Component{x, y, w, h}, textColor(color)
 		{
 			fontID = Config::FONT + std::to_string(fontSize);
@@ -23,28 +23,40 @@ namespace Engine
 			font = ResourceManager<TTF_Font>::GetInstance().
 				GetByName(fontID, loadFont);
 
-			SetText(text);
+			SetText(text, color, isCached);
 		}
 
 		void SetText(const std::string& text) { SetText(text, textColor); }
 
-		void SetText(const std::string& text, SDL_Color color)
+		void SetText(const std::string& text, SDL_Color color, bool isCached = false)
 		{
-			if (textSurface)
-			{
-				SDL_FreeSurface(textSurface);
-			}
 			textColor = color;
 
-			//UniqueNameFormat font_text_color
-			textSurface = TTF_RenderUTF8_Blended(font.get(), text.c_str(), color);
+			//UniqueNameFormat font_text
+			//Assumed the 2 different colors would not be cached
+			if (isCached)
+			{
+				const std::string colorID = std::to_string(color.r + color.g + color.b);
+				const std::string textID = fontID + text + colorID;
+				TTF_Font* usedFont = font.get();
+
+				auto loadText = [text, usedFont, color]() -> std::shared_ptr<SDL_Surface>
+					{return LoadText(text, usedFont, color);};
+
+				textSurface = ResourceManager<SDL_Surface>::GetInstance().
+					GetByName(textID, loadText);
+			}
+			else
+			{
+				textSurface = LoadText(text, font.get(), textColor);
+			}
 
 			UpdateTextPosition();
 		}
 
 		void Render(SDL_Surface* surface) override
 		{
-			SDL_BlitScaled(textSurface, nullptr, surface, &textPos);
+			SDL_BlitScaled(textSurface.get(), nullptr, surface, &textPos);
 		}
 
 		static SDL_Surface* SaveTextAsImage(
@@ -63,11 +75,6 @@ namespace Engine
 
 		virtual void HandleEvent(const SDL_Event& event) override {}
 
-		~Text()
-		{
-			if (textSurface) { SDL_FreeSurface(textSurface); }
-		}
-
 	protected:
 		void HandleChildPosition() override
 		{
@@ -76,7 +83,7 @@ namespace Engine
 		}
 
 	private:
-		SDL_Surface* textSurface = nullptr;
+		std::shared_ptr<SDL_Surface> textSurface = nullptr;
 		std::shared_ptr<TTF_Font> font = nullptr;
 		std::string fontID;
 
@@ -112,6 +119,21 @@ namespace Engine
 			}
 
 			return std::shared_ptr<TTF_Font>(font, TTF_CloseFont);
+		}
+
+		static std::shared_ptr<SDL_Surface> LoadText(const std::string& text, TTF_Font* font, SDL_Color color)
+		{
+			SDL_Surface* rawSurface = TTF_RenderUTF8_Blended(font, text.c_str(), color);
+			if (!rawSurface)
+			{
+				#ifdef SHOW_DEBUG_HELPERS
+				Utils::CheckSDLErrors("TEXT_Load");
+				#endif // SHOW_DEBUG_HELPERS
+
+				return nullptr;
+			}
+
+			return std::shared_ptr<SDL_Surface>(rawSurface, SDL_FreeSurface);
 		}
 	};
 }
