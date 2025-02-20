@@ -2,16 +2,18 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 
 #include "Engine/Globals.h"
 #include "Engine/Window.h"
 #include "Engine/Component.h"
+#include "Engine/SoundManager.h"
 #include "UI.h"
 using namespace std;
 
 int main(int argc, char** argv)
 {
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     #ifdef SHOW_DEBUG_HELPERS
         Utils::CheckSDLErrors("SDL_Init");
     #endif
@@ -25,6 +27,8 @@ int main(int argc, char** argv)
     #ifdef SHOW_DEBUG_HELPERS
         Utils::CheckSDLErrors("TTF_Init");
     #endif 
+
+    SoundManager::OpenAudio();
 
     Engine::Window window;
     MineSweeperUI UI;
@@ -55,6 +59,8 @@ int main(int argc, char** argv)
         window.UpdateFrame();
     }
 
+    Mix_Quit();
+    IMG_Quit();
     SDL_Quit();
     return 0;
 }

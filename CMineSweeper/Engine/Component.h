@@ -8,10 +8,6 @@
 //Improvements:
 //Sounds system	
 
-//When Minesweeper is completed:
-//Rework your code again and now implement a unique pointers
-//Create an add child function
-
 namespace Engine
 {
 	class Component
@@ -37,6 +33,7 @@ namespace Engine
 
 		Component(const Component&) = delete;
 		Component& operator=(const Component&) = delete;
+		virtual ~Component() = default;
 
 	protected:
 		virtual void HandleChildPosition();

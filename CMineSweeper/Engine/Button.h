@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL.h>
+#include "SoundManager.h"
 #include "Globals.h"
 #include "Rectangle.h"
 
@@ -26,6 +27,8 @@ namespace Engine
 			{
 				if (IsWithinBounds(event.button.x, event.button.y))
 				{
+					SoundManager::GetInstance().LoadSFX("button_click", "Assets/Click.mp3");
+					SoundManager::GetInstance().PlaySFX("button_click");
 					event.button.button == SDL_BUTTON_LEFT ? 
 						HandleLeftClick() : HandleRightClick();
 				}
