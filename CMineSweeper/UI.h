@@ -36,11 +36,11 @@ private:
 		Config::FOOTER_HEIGHT - Config::PADDING
 		} };
 
-	Grid* minesweeperGrid{ new Grid{0,0, counter} };
-
 	NewGameButton* newGameButton{ new NewGameButton{0, 0,
 	Config::GRID_WIDTH - Config::COUNTER_WIDTH,
 	Config::FOOTER_HEIGHT - Config::PADDING } };
+
+	Grid* minesweeperGrid{ new Grid{0,0, counter} };
 
 	Engine::Column* layout{ new Engine::Column{
 		Config::PADDING, Config::PADDING,

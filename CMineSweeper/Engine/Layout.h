@@ -15,11 +15,6 @@ namespace Engine
 			Component(x, y, 0, 0), padding(padding), margin(margin)
 		{
 			SetRelSize(margin * 2, margin * 2);
-
-			for (Component* component : components)
-			{
-				AddComponent(*component);
-			}
 		}
 
 		void AddComponent(Component& child)
@@ -48,12 +43,24 @@ namespace Engine
 			}
 		}
 
+		virtual ~Layout() = default;
+
 	protected:
 		int GetPadding() { return padding; }
 		int GetMargin() { return margin; }
 
+		void InitLayout(std::vector<Component*> components)
+		{
+			for (Component* component : components)
+			{
+				AddComponent(*component);
+			}
+
+			HandleChildPosition();
+		}
+
 		virtual void StretchContainer(const SDL_Rect* objRect,
-			const SDL_Rect* myRect) {}
+			const SDL_Rect* myRect) = 0;
 
 	private:
 		int padding = 0;

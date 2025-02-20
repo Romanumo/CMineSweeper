@@ -5,9 +5,6 @@
 #include<memory>
 #include "Globals.h"
 
-//Improvements:
-//Sounds system	
-
 namespace Engine
 {
 	class Component

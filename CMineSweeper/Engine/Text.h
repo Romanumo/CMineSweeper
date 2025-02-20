@@ -37,6 +37,7 @@ namespace Engine
 			}
 			textColor = color;
 
+			//UniqueNameFormat font_text_color
 			textSurface = TTF_RenderUTF8_Blended(font, text.c_str(), color);
 
 			UpdateTextPosition();
