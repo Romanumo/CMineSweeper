@@ -36,6 +36,8 @@ int main(int argc, char** argv)
     SDL_Event event;
     bool shouldQuit = false;
 
+    SoundManager::GetInstance().PlayMusic(Config::BCG_MUSIC);
+
     while (!shouldQuit)
     {
         //Handle Input

@@ -27,8 +27,7 @@ namespace Engine
 			{
 				if (IsWithinBounds(event.button.x, event.button.y))
 				{
-					SoundManager::GetInstance().LoadSFX("button_click", "Assets/Click.mp3");
-					SoundManager::GetInstance().PlaySFX("button_click");
+					SoundManager::GetInstance().PlaySFX(Config::CLICK_SOUND);
 					event.button.button == SDL_BUTTON_LEFT ? 
 						HandleLeftClick() : HandleRightClick();
 				}

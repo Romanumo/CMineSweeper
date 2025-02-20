@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <unordered_map>
+#include "ResourceManager.h"
 
 class SoundManager {
 public:
@@ -19,46 +20,49 @@ public:
         }
     }
 
-    bool LoadMusic(const std::string& name, const std::string& path) 
-    {
-        auto music = Mix_LoadMUS(path.c_str());
-        if (!music) return false;
-        musicTracks[name] = music;
-        return true;
-    }
-
-    bool LoadSFX(const std::string& name, const std::string& path) 
-    {
-        auto sound = Mix_LoadWAV(path.c_str());
-        if (!sound) return false;
-        soundEffects[name] = sound;
-        return true;
-    }
-
-    void PlayMusic(const std::string& name, int loops = -1) 
+    void PlayMusic(const std::string& path, int loops = -1) 
     {
         if (currentMusic) Mix_HaltMusic();
-        currentMusic = musicTracks[name];
+
+        currentMusic = ResourceManager<Mix_Music>::GetInstance().GetByPath(path, LoadMusic).get();
         if (currentMusic) Mix_PlayMusic(currentMusic, loops);
     }
 
-    void PlaySFX(const std::string& name) 
+    void PlaySFX(const std::string& path) 
     {
-        Mix_PlayChannel(-1, soundEffects[name], 0);
+        Mix_Chunk* sound = ResourceManager<Mix_Chunk>::GetInstance().GetByPath(path, LoadSFX).get();
+        Mix_PlayChannel(-1, sound, 0);
     }
 
     void SetMusicVolume(int volume) { Mix_VolumeMusic(volume); }
     void SetSFXVolume(int volume) { Mix_Volume(-1, volume); }
 
-    ~SoundManager() {
-        for (auto& [_, music] : musicTracks) Mix_FreeMusic(music);
-        for (auto& [_, sfx] : soundEffects) Mix_FreeChunk(sfx);
-        Mix_CloseAudio();
-    }
-
 private:
     SoundManager() { Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048); }
-    std::unordered_map<std::string, Mix_Music*> musicTracks;
-    std::unordered_map<std::string, Mix_Chunk*> soundEffects;
+    ~SoundManager() { Mix_CloseAudio(); }
     Mix_Music* currentMusic = nullptr;
+
+    static std::shared_ptr<Mix_Music> LoadMusic(const std::string& path)
+    {
+        Mix_Music* music = Mix_LoadMUS(path.c_str());
+        if (!music)
+        {
+            std::cout << "Failed Loading Music. Path: " << path << std::endl;
+
+            return nullptr;
+        }
+        return std::shared_ptr<Mix_Music>(music, Mix_FreeMusic);
+    }
+
+    static std::shared_ptr<Mix_Chunk> LoadSFX(const std::string& path)
+    {
+        Mix_Chunk* sound = Mix_LoadWAV(path.c_str());
+        if (!sound)
+        {
+            std::cout << "Failed Loading Sound. Path: " << path << std::endl;
+
+            return nullptr;
+        }
+        return std::shared_ptr<Mix_Chunk>(sound, Mix_FreeChunk);
+    }
 };
