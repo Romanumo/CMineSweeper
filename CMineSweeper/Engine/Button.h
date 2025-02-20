@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL.h>
+#include "SoundManager.h"
 #include "Globals.h"
 #include "Rectangle.h"
 

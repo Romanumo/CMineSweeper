@@ -12,18 +12,6 @@ Component::Component(int x, int y, int w, int h) :
 	UpdateTransform();
 }
 
-Component::~Component()
-{
-	if (children.size() < 1) return;
-
-	for(Component* child : children)
-	{
-		std::cout << this->GetName() << " deletes " 
-			<< child->GetName() << std::endl;
-		delete child;
-	}
-}
-
 #pragma region Positioning
 
 void Component::SetRelPosition(int x, int y)
@@ -63,7 +51,7 @@ void Component::HandleChildPosition()
 {
 	if (children.size() < 1) return;
 
-	for (Component* component : children)
+	for (const auto& component : children)
 	{
 		component->UpdateTransform();
 	}
@@ -80,67 +68,55 @@ void Component::PrintFamilyTree(int spacing)
 
 	if (children.size() < 1) return;
 
-	for (Component* component : children)
+	for (const auto& component : children)
 	{
 		component->PrintFamilyTree(spacing + 1);
 	}
 }
 
-bool Component::SetAsChildOf(Component* parent)
+bool Component::AdoptChild(Component* child)
 {
-	if (parent == this)
+	if (child == nullptr)
 	{
-		std::cout << "Component cannot be a child of himself" << std::endl;
+		std::cout << "Cannot adopt a nullptr as child!" << std::endl;
 		return false;
 	}
 
-	if (this->parent != nullptr)
+	if (child == this)
+	{
+		std::cout << "Parent cannot adopt himself" << std::endl;
+		return false;
+	}
+
+	if (child->GetParent() != nullptr)
 	{
 		std::cout << "Component already have a parent" << std::endl;
 		return false;
 	}
 
-	if (IsMyChild(parent))
+	if (child->IsMyChild(*this))
 	{
-		std::cout << "Component ancestor is his child" << std::endl;
+		std::cout << "Components ancestor is his child" << std::endl;
 		return false;
 	}
 
-	if (IsMyRelative(parent))
-	{
-		std::cout << "Component cannot be a child of his relative" << std::endl;
-		return false;
-	}
-
-	this->parent = parent;
-	parent->SetAsParentOf(this);
+	child->parent = this;
+	children.push_back(std::unique_ptr<Component>(child));
 	return true;
 }
 
-bool Component::IsMyChild(Component* child) const
+bool Component::IsMyChild(const Component& child) const
 {
 	if (children.size() < 1) return false;
 
-	for (Component* component : children)
+	for (const auto& component : children)
 	{
-		if (component == child) return true;
+		if (component.get() == &child) return true;
 
 		if (component->IsMyChild(child)) return true;
 	}
 
 	return false;
-}
-
-bool Component::IsMyRelative(Component* child)
-{
-	if (child->GetParent() == nullptr) return false;
-
-	return (child->GetParent() == this->GetParent());
-}
-
-void Component::SetAsParentOf(Component* child)
-{
-	children.push_back(child);
 }
 
 void Component::ReserveChildrenSize(int reserve) { children.reserve(reserve); }
@@ -149,9 +125,9 @@ void Component::ReserveChildrenSize(int reserve) { children.reserve(reserve); }
 
 #pragma region GettersSetters
 
-std::string Component::GetName() { return typeid(*this).name(); }
-Component* Component::GetParent() { return parent; }
-const std::vector<Component*>& Component::GetChildren() { return children; }
+std::string Component::GetName() const { return typeid(*this).name(); }
+Component* Component::GetParent() const { return parent; }
+const std::vector<std::unique_ptr<Component>>& Component::GetChildren() const { return children; }
 
 const SDL_Rect* Component::GetAbsTf() const { return &absTf; }
 SDL_Rect* Component::GetAbsTf() { return &absTf; }

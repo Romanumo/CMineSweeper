@@ -30,6 +30,11 @@ namespace Engine
 			imageSurface = ResourceManager<SDL_Surface>::GetInstance().GetByPath(filePath, LoadImage);
 		}
 
+		void PrintImageAddress()
+		{
+			std::cout << imageSurface.get() << std::endl;
+		}
+
 	private:
 		std::shared_ptr<SDL_Surface> imageSurface = nullptr;
 

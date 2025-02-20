@@ -28,7 +28,7 @@ Grid::Grid(int x, int y, FlagCounter* flagCounter) : Component(x, y, 0, 0)
 				CELL_SIZE, CELL_SIZE, row, col, this
 			);
 
-			cell->SetAsChildOf(this);
+			this->AdoptChild(cell);
 			AddSubscriber(cell);
 		}
 	}
@@ -38,7 +38,7 @@ Grid::Grid(int x, int y, FlagCounter* flagCounter) : Component(x, y, 0, 0)
 
 void Grid::Render(SDL_Surface* surface)
 {
-	for (Component* child : GetChildren())
+	for (const auto& child : GetChildren())
 	{
 		child->Render(surface);
 	}
@@ -57,7 +57,7 @@ void Grid::HandleEvent(const SDL_Event& event)
 
 	NotifySubsribers(event);
 
-	for (Component* component : GetChildren())
+	for (const auto& component : GetChildren())
 	{
 		component->HandleEvent(event);
 	}
@@ -126,6 +126,8 @@ bool Grid::ReceiveFlagPlacement()
 	{
 		flagsAvailable--;
 		flagCounter->Update(flagsAvailable);
+
+		SoundManager::GetInstance().PlaySFX(Config::FLAG_SOUND);
 		return true;
 	}
 
@@ -142,6 +144,7 @@ void Grid::HandleCellCleared(const Cell& openedCell)
 {
 	if (openedCell.HasBomb())
 	{
+		SoundManager::GetInstance().PlaySFX(Config::BOMB_SOUND);
 		SDL_Event gameLost{ UserEvents::GAME_LOST };
 		SDL_PushEvent(&gameLost);
 	}
@@ -195,7 +198,7 @@ bool Grid::IsCellInsideArea(std::vector<Cell*> area, Cell* cell)
 
 Cell* Grid::GetChildToCell(int index)
 {
-	if (Cell* cell = dynamic_cast<Cell*>(GetChildren()[index]))
+	if (Cell* cell = dynamic_cast<Cell*>(GetChildren()[index].get()))
 	{
 		return cell;
 	}
