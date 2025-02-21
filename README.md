@@ -1,6 +1,6 @@
 # Minesweeper Game with Custom UI Framework
 
-This project is a simple Minesweeper game built using SDL2, inspired and built upon [studyplan.dev's minesweeper tutorial](https://www.studyplan.dev/sdl2-minesweeper). It features an overhauled and improved UI, Cache and Layout Systems. 
+This project is a simple Minesweeper game built using SDL2, inspired and built upon [studyplan.dev's minesweeper tutorial](https://www.studyplan.dev/sdl2-minesweeper). It features an overhauled Minesweeper base game and added hierarchial-based UI System, Cache Manager and Sound Manager.
 
 ## 🛠️ Key Features
 
