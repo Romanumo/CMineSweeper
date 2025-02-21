@@ -1,7 +1,7 @@
 #pragma once
 #include <SDL.h>
-#include "SoundManager.h"
-#include "Globals.h"
+#include "Managers/SoundManager.h"
+#include "Managers/Globals.h"
 #include "Rectangle.h"
 
 //Button would be really benefitted from command pattern design

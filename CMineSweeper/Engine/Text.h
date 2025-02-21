@@ -1,10 +1,12 @@
 #pragma once
 #include <SDL_ttf.h>
 #include <string>
-#include "Globals.h"
+
+#include "Managers/Globals.h"
 #include "Component.h"
 
-//Text works on an assumtion of one font
+//Text could use a strategy for a change of assigning text
+
 namespace Engine
 {
 	class Text : public Component

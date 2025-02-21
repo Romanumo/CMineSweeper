@@ -2,8 +2,8 @@
 #include <SDL.h>
 #include <typeinfo>
 #include <string>
-#include<memory>
-#include "Globals.h"
+#include <memory>
+#include "Managers/Globals.h"
 
 namespace Engine
 {

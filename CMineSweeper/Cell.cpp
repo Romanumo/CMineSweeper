@@ -1,6 +1,5 @@
 #include "Cell.h"
 #include <iostream>
-#include "Engine/Globals.h"
 #include "Grid.h"
 
 //But every CELL has A BOMB IMAGE

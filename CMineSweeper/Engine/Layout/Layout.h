@@ -2,7 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <memory>
-#include "Component.h"
+#include "../Component.h"
 
 //Stretch (from row or column) might not be called from a layout constrcutor
 //

@@ -2,8 +2,8 @@
 #include <SDL.h>
 
 #include "Engine/Component.h"
-#include "Engine/Row.h"
-#include "Engine/Column.h"
+#include "Engine/Layout/Row.h"
+#include "Engine/Layout/Column.h"
 
 #include "Grid.h"
 #include "NewGameButton.h"

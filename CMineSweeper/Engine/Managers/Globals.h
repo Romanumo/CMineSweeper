@@ -19,8 +19,8 @@ namespace Config
 {
 	//Game Settings
 	inline const std::string GAME_NAME = "MineSweeper";
-	inline constexpr int GRID_COLUMNS = 20;
-	inline constexpr int GRID_ROWS = 30;
+	inline constexpr int GRID_COLUMNS = 8;
+	inline constexpr int GRID_ROWS = 6;
 	inline constexpr int BOMB_COUNT = 10;
 	static_assert(
 		BOMB_COUNT < GRID_COLUMNS * GRID_ROWS - 9, 

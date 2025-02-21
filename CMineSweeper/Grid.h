@@ -1,14 +1,12 @@
 #pragma once
 #include <vector>
 
-#include "Engine/Globals.h"
+#include "Engine/Managers/Globals.h"
 #include "Engine/Random.h"
 #include "Engine/Component.h"
 #include "FlagCounter.h"
 #include "EventManager.h"
 #include "Cell.h"
-
-//Grid can load all needed numberImages
 
 class Grid : public Engine::Component, public EventManager
 {

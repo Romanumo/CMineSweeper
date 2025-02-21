@@ -4,11 +4,13 @@
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 
-#include "Engine/Globals.h"
-#include "Engine/Window.h"
 #include "Engine/Component.h"
-#include "Engine/SoundManager.h"
 #include "UI.h"
+
+#include "Engine/Managers/Window.h"
+#include "Engine/Managers/SoundManager.h"
+#include "Engine/Managers/Globals.h"
+
 using namespace std;
 
 int main(int argc, char** argv)

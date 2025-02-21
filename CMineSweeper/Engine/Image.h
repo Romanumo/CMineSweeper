@@ -1,10 +1,11 @@
 #pragma once
 #include <SDL_image.h>
 #include <string>
-#include "Component.h"
-#include "ResourceManager.h"
 
-#include "Globals.h"
+#include "Managers/ResourceManager.h"
+#include "Managers/Globals.h"
+
+#include "Component.h"
 
 namespace Engine
 {
