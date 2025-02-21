@@ -147,6 +147,7 @@
     <ClInclude Include="Engine\Layout\Layout.h" />
     <ClInclude Include="Engine\Layout\Row.h" />
     <ClInclude Include="Engine\Managers\SoundManager.h" />
+    <ClInclude Include="Engine\TextFactory.h" />
     <ClInclude Include="EventListener.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="FlagCounter.h" />
