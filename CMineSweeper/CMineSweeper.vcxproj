@@ -143,6 +143,7 @@
     <ClInclude Include="Engine\Button.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Engine\Layout\Column.h" />
+    <ClInclude Include="Engine\Managers\LoadUtils.h" />
     <ClInclude Include="Engine\Managers\ResourceManager.h" />
     <ClInclude Include="Engine\Layout\Layout.h" />
     <ClInclude Include="Engine\Layout\Row.h" />
@@ -155,7 +156,7 @@
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Engine\Image.h" />
     <ClInclude Include="NewGameButton.h" />
-    <ClInclude Include="Engine\Random.h" />
+    <ClInclude Include="Engine\Managers\Random.h" />
     <ClInclude Include="Engine\Rectangle.h" />
     <ClInclude Include="Engine\Text.h" />
     <ClInclude Include="Engine\Component.h" />

@@ -6,25 +6,22 @@
 #include "TextFactory.h"
 #include "Component.h"
 
-//Text could use a strategy for a change of assigning text
+//Maybe assign dynamic as defaut and make a separate function to change it
 
 namespace Engine
 {
 	class Text : public Component
 	{
 	public:
-		Text(int x, int y, int w, int h,
-			const std::string& text, 
-			std::unique_ptr<ITextFactory> textFactory = 
-			std::make_unique<ITextFactory>(DynamicTextFactory()),
-			SDL_Color color = { 0, 0,0,255 },
-			int fontSize = 60) : 
-			Component{x, y, w, h}, textColor(color), 
-			textFactory(std::move(textFactory))
+		Text(int x, int y, int w, int h, const std::string& text, 
+			SDL_Color color = { 0, 0,0,255 }, int fontSize = 60) : 
+			Component{x, y, w, h}, textColor(color)
 		{
+			textFactory = std::make_unique<DynamicTextFactory>();
+
 			const std::string& fontID = Config::FONT + std::to_string(fontSize);
 			auto loadFont = [fontSize]() -> std::shared_ptr<TTF_Font>
-				{return ITextFactory::LoadFont(Config::FONT, fontSize);};
+				{return LoadUtils::LoadFont(Config::FONT, fontSize);};
 
 			font = ResourceManager<TTF_Font>::GetInstance().
 				GetByName(fontID, loadFont);
@@ -41,6 +38,11 @@ namespace Engine
 			textSurface = textFactory->GetSurface(text, font.get(), color);
 
 			UpdateTextPosition();
+		}
+
+		void SetTextRenderType(std::unique_ptr<ITextFactory> textFactory)
+		{
+			this->textFactory = std::move(textFactory);
 		}
 
 		void Render(SDL_Surface* surface) override

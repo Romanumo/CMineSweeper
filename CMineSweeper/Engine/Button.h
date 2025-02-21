@@ -4,8 +4,6 @@
 #include "Managers/Globals.h"
 #include "Rectangle.h"
 
-//Button would be really benefitted from command pattern design
-
 namespace Engine
 {
 	class Button : public Rectangle

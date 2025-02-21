@@ -31,14 +31,6 @@ public:
 		return resource;
 	}
 
-	std::shared_ptr<Resource> GetByName(const std::string& assetName)
-	{
-		auto image = resourcePool.find(assetName);
-		if (image != resourcePool.end()) return image->second;
-
-		return nullptr;
-	}
-
 	template <typename Load>
 	std::shared_ptr<Resource> GetByName(const std::string& assetName, Load loadFunction)
 	{

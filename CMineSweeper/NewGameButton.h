@@ -8,8 +8,7 @@ class NewGameButton : public Engine::Button
 public:
 	NewGameButton(int x, int y, int w, int h) :
 		Button{ x, y, w, h },
-		text{ new Engine::Text{x, y, w, h, "New Game", 
-		std::make_unique<Engine::DynamicTextFactory>(), {}, 40}}
+		text{ new Engine::Text{x, y, w, h, "New Game", {}, 40}}
 	{
 		this->AdoptChild(text);
 	};

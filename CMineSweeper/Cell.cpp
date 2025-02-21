@@ -9,8 +9,7 @@ Cell::Cell(int x, int y, int w, int h, int row, int col, Grid* parent) :
 	bombImage{ new Engine::Image{0,0 , w, h, Config::BOMB_IMAGE} },
 	flagImage{ new Engine::Image{0,0, w, h, Config::FLAG_IMAGE} },
 	text{ new Engine::Text{0,0, w, h,
-	std::to_string(adjacentBombs), 
-	std::make_unique<Engine::CachedTextFactory>(),
+	std::to_string(adjacentBombs),
 	Config::TEXT_COLORS[adjacentBombs], 60} },
 	gridParent(parent), 
 	EventListener(std::vector<Uint32>
@@ -18,6 +17,8 @@ Cell::Cell(int x, int y, int w, int h, int row, int col, Grid* parent) :
 		UserEvents::GAME_LOST,
 		UserEvents::CELL_CLEARED})
 {
+	text->SetTextRenderType(std::make_unique<Engine::CachedTextFactory>());
+
 	this->AdoptChild(bombImage);
 	this->AdoptChild(flagImage);
 	this->AdoptChild(text);

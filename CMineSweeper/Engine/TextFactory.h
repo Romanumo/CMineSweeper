@@ -14,37 +14,6 @@ namespace Engine
 		virtual ~ITextFactory() = default;
 		virtual std::shared_ptr<SDL_Surface> GetSurface(
 			const std::string& text, TTF_Font* font, SDL_Color color) = 0;
-
-		static std::shared_ptr<SDL_Surface> LoadText(const std::string& text, TTF_Font* font, SDL_Color color)
-		{
-			SDL_Surface* rawSurface = TTF_RenderUTF8_Blended(font, text.c_str(), color);
-			if (!rawSurface)
-			{
-				#ifdef SHOW_DEBUG_HELPERS
-				Utils::CheckSDLErrors("TEXT_Load");
-				#endif // SHOW_DEBUG_HELPERS
-
-				return nullptr;
-			}
-
-			return std::shared_ptr<SDL_Surface>(rawSurface, SDL_FreeSurface);
-		}
-
-		static std::shared_ptr<TTF_Font> LoadFont(const std::string& path, int fontSize)
-		{
-			TTF_Font* font = TTF_OpenFont(path.c_str(), fontSize);
-
-			if (!font)
-			{
-				#ifdef SHOW_DEBUG_HELPERS
-				Utils::CheckSDLErrors("TTF_OpenFont");
-				#endif // SHOW_DEBUG_HELPERS
-
-				return nullptr;
-			}
-
-			return std::shared_ptr<TTF_Font>(font, TTF_CloseFont);
-		}
 	};
 
 	class DynamicTextFactory : public ITextFactory
@@ -53,7 +22,7 @@ namespace Engine
 		std::shared_ptr<SDL_Surface> GetSurface(
 			const std::string& text, TTF_Font* font, SDL_Color color) override
 		{
-			return LoadText(text, font, color);
+			return LoadUtils::LoadText(text, font, color);
 		}
 	};
 
@@ -68,7 +37,7 @@ namespace Engine
 			TTF_Font* usedFont = font;
 
 			auto loadText = [text, usedFont, color]() -> std::shared_ptr<SDL_Surface>
-				{return LoadText(text, usedFont, color);};
+				{return LoadUtils::LoadText(text, usedFont, color);};
 
 			return ResourceManager<SDL_Surface>::GetInstance().
 				GetByName(textID, loadText);

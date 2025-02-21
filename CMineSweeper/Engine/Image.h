@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Managers/ResourceManager.h"
+#include "Managers/LoadUtils.h"
 #include "Managers/Globals.h"
 
 #include "Component.h"
@@ -28,24 +29,10 @@ namespace Engine
 
 		void SetImage(const std::string& filePath)
 		{
-			imageSurface = ResourceManager<SDL_Surface>::GetInstance().GetByPath(filePath, LoadImage);
+			imageSurface = ResourceManager<SDL_Surface>::GetInstance().GetByPath(filePath, LoadUtils::LoadImage);
 		}
 
 	private:
 		std::shared_ptr<SDL_Surface> imageSurface = nullptr;
-
-		static std::shared_ptr<SDL_Surface> LoadImage(const std::string& filePath)
-		{
-			SDL_Surface* rawSurface = IMG_Load(filePath.c_str());
-			if (!rawSurface)
-			{
-				#ifdef SHOW_DEBUG_HELPERS
-				Utils::CheckSDLErrors("IMG_Load");
-				#endif // SHOW_DEBUG_HELPERS
-
-				return nullptr;
-			}
-			return std::shared_ptr<SDL_Surface>(rawSurface, SDL_FreeSurface);
-		}
 	};
 }

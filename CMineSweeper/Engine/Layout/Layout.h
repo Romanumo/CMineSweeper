@@ -4,8 +4,6 @@
 #include <memory>
 #include "../Component.h"
 
-//Stretch (from row or column) might not be called from a layout constrcutor
-//
 namespace Engine
 {
 	class Layout : public Component
