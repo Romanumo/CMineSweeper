@@ -1,6 +1,6 @@
 #pragma once
 #include "Engine/Button.h"
-#include "Engine/Globals.h"
+#include "Engine/Managers/Globals.h"
 #include "Engine/Text.h"
 
 class NewGameButton : public Engine::Button
@@ -8,7 +8,7 @@ class NewGameButton : public Engine::Button
 public:
 	NewGameButton(int x, int y, int w, int h) :
 		Button{ x, y, w, h },
-		text{ new Engine::Text{x, y, w, h, "New Game", {}, 40 } }
+		text{ new Engine::Text{x, y, w, h, "New Game", {}, 40}}
 	{
 		this->AdoptChild(text);
 	};

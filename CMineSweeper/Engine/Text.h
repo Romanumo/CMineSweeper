@@ -1,70 +1,53 @@
 #pragma once
 #include <SDL_ttf.h>
 #include <string>
-#include "Globals.h"
+
+#include "Managers/Globals.h"
+#include "TextFactory.h"
 #include "Component.h"
+
+//Maybe assign dynamic as defaut and make a separate function to change it
 
 namespace Engine
 {
 	class Text : public Component
 	{
 	public:
-		Text(int x, int y, int w, int h,
-			const std::string& text, 
-			SDL_Color color = { 0, 0,0,255 },
-			int fontSize = 60) : 
+		Text(int x, int y, int w, int h, const std::string& text, 
+			SDL_Color color = { 0, 0,0,255 }, int fontSize = 60) : 
 			Component{x, y, w, h}, textColor(color)
 		{
-			font = TTF_OpenFont(Config::FONT.c_str(), fontSize);
+			textFactory = std::make_unique<DynamicTextFactory>();
 
-			#ifdef SHOW_DEBUG_HELPERS
-			Utils::CheckSDLErrors("TTF_OpenFont");
-			#endif // SHOW_DEBUG_HELPERS
+			const std::string& fontID = Config::FONT + std::to_string(fontSize);
+			auto loadFont = [fontSize]() -> std::shared_ptr<TTF_Font>
+				{return LoadUtils::LoadFont(Config::FONT, fontSize);};
 
-			SetText(text);
+			font = ResourceManager<TTF_Font>::GetInstance().
+				GetByName(fontID, loadFont);
+
+			SetText(text, color);
 		}
 
-		void SetText(const std::string& text)
-		{
-			SetText(text, textColor);
-		}
+		void SetText(const std::string& text) { SetText(text, textColor); }
 
 		void SetText(const std::string& text, SDL_Color color)
 		{
-			if (textSurface)
-			{
-				SDL_FreeSurface(textSurface);
-			}
 			textColor = color;
 
-			textSurface = TTF_RenderUTF8_Blended(font, text.c_str(), color);
+			textSurface = textFactory->GetSurface(text, font.get(), color);
 
 			UpdateTextPosition();
 		}
 
+		void SetTextRenderType(std::unique_ptr<ITextFactory> textFactory)
+		{
+			this->textFactory = std::move(textFactory);
+		}
+
 		void Render(SDL_Surface* surface) override
 		{
-			SDL_BlitScaled(textSurface, nullptr, surface, &textPos);
-		}
-
-		~Text()
-		{
-			if (font) { TTF_CloseFont(font); }
-			if (textSurface) { SDL_FreeSurface(textSurface); }
-		}
-
-		static SDL_Surface* SaveTextAsImage(
-			const std::string& fontPath, int fontSize, 
-			const std::string& text, SDL_Color color) 
-		{
-			TTF_Font* savedFont = TTF_OpenFont(fontPath.c_str(), fontSize);
-			SDL_Surface* textSurface = TTF_RenderUTF8_Blended(savedFont, text.c_str(), color);
-			TTF_CloseFont(savedFont);
-
-			if(textSurface)return textSurface;
-			
-			std::cout << "Problem saving text" << std::endl;
-			return nullptr;
+			SDL_BlitScaled(textSurface.get(), nullptr, surface, &textPos);
 		}
 
 		virtual void HandleEvent(const SDL_Event& event) override {}
@@ -77,11 +60,13 @@ namespace Engine
 		}
 
 	private:
-		SDL_Surface* textSurface = nullptr;
-		TTF_Font* font = nullptr;
+		std::shared_ptr<SDL_Surface> textSurface = nullptr;
+		std::shared_ptr<TTF_Font> font = nullptr;
 
 		SDL_Rect textPos{ 0,0,0,0 };
 		SDL_Color textColor{ 0,0,0,255 };
+
+		std::unique_ptr<ITextFactory> textFactory;
 
 		void UpdateTextPosition()
 		{

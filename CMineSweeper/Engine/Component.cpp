@@ -2,7 +2,6 @@
 #include <SDL.h>
 #include <typeinfo>
 #include <string>
-#include "Globals.h"
 #include "Component.h"
 using namespace Engine;
 

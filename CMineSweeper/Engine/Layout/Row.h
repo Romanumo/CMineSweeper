@@ -12,7 +12,7 @@ namespace Engine
 		Row(int padding, int margin, int x, int y, std::vector<Component*> components) :
 			Layout(padding, margin, x, y, components)
 		{
-			HandleChildPosition();
+			InitLayout(components);
 		}
 
 		Row(int padding, int margin, std::vector<Component*> components) :

@@ -1,6 +1,5 @@
 #include "Cell.h"
 #include <iostream>
-#include "Engine/Globals.h"
 #include "Grid.h"
 
 //But every CELL has A BOMB IMAGE
@@ -11,13 +10,15 @@ Cell::Cell(int x, int y, int w, int h, int row, int col, Grid* parent) :
 	flagImage{ new Engine::Image{0,0, w, h, Config::FLAG_IMAGE} },
 	text{ new Engine::Text{0,0, w, h,
 	std::to_string(adjacentBombs),
-	Config::TEXT_COLORS[adjacentBombs]} },
+	Config::TEXT_COLORS[adjacentBombs], 60} },
 	gridParent(parent), 
 	EventListener(std::vector<Uint32>
 		{UserEvents::NEW_GAME, 
 		UserEvents::GAME_LOST,
 		UserEvents::CELL_CLEARED})
 {
+	text->SetTextRenderType(std::make_unique<Engine::CachedTextFactory>());
+
 	this->AdoptChild(bombImage);
 	this->AdoptChild(flagImage);
 	this->AdoptChild(text);

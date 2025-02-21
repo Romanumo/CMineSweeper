@@ -6,8 +6,6 @@
 #include<vector>
 #include<string>
 
-//I am a bit sceptical about these events 
-//As they make global the communication between grid and cells
 namespace UserEvents 
 {
 	inline Uint32 CELL_CLEARED = SDL_RegisterEvents(1);

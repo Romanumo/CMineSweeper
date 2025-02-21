@@ -2,6 +2,7 @@
 #include "Engine/Button.h"
 #include "Engine/Image.h"
 #include "Engine/Text.h"
+#include "Engine/Managers/Globals.h"
 #include "EventListener.h"
 
 class Grid;

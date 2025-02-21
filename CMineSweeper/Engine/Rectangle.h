@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
-#include "Globals.h"
+
+#include "Managers/Globals.h"
 #include "Component.h"
 
 namespace Engine

@@ -2,11 +2,8 @@
 #include <SDL.h>
 #include <typeinfo>
 #include <string>
-#include<memory>
-#include "Globals.h"
-
-//Improvements:
-//Sounds system	
+#include <memory>
+#include "Managers/Globals.h"
 
 namespace Engine
 {
