@@ -9,7 +9,8 @@ Cell::Cell(int x, int y, int w, int h, int row, int col, Grid* parent) :
 	bombImage{ new Engine::Image{0,0 , w, h, Config::BOMB_IMAGE} },
 	flagImage{ new Engine::Image{0,0, w, h, Config::FLAG_IMAGE} },
 	text{ new Engine::Text{0,0, w, h,
-	std::to_string(adjacentBombs), new CachedTextFactory(),
+	std::to_string(adjacentBombs), 
+	std::make_unique<Engine::CachedTextFactory>(),
 	Config::TEXT_COLORS[adjacentBombs], 60} },
 	gridParent(parent), 
 	EventListener(std::vector<Uint32>

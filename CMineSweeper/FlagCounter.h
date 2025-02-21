@@ -20,7 +20,7 @@ public:
         text{ new Engine::Text{0, 0,
             w - Config::FOOTER_HEIGHT - 24, h,
             std::to_string(Config::BOMB_COUNT),
-            new DynamicTextFactory(),
+            std::make_unique<Engine::DynamicTextFactory>(),
             {255, 255, 255, 255}, 30} },
         layout{new Engine::Row{ Config::PADDING, Config::PADDING, 0, 0,
             std::vector<Engine::Component*>{

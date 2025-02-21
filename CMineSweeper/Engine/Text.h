@@ -15,11 +15,12 @@ namespace Engine
 	public:
 		Text(int x, int y, int w, int h,
 			const std::string& text, 
-			ITextFactory* textFactory = new DynamicTextFactory(),
+			std::unique_ptr<ITextFactory> textFactory = 
+			std::make_unique<ITextFactory>(DynamicTextFactory()),
 			SDL_Color color = { 0, 0,0,255 },
 			int fontSize = 60) : 
 			Component{x, y, w, h}, textColor(color), 
-			textFactory(textFactory)
+			textFactory(std::move(textFactory))
 		{
 			const std::string& fontID = Config::FONT + std::to_string(fontSize);
 			auto loadFont = [fontSize]() -> std::shared_ptr<TTF_Font>
@@ -63,7 +64,7 @@ namespace Engine
 		SDL_Rect textPos{ 0,0,0,0 };
 		SDL_Color textColor{ 0,0,0,255 };
 
-		ITextFactory* textFactory;
+		std::unique_ptr<ITextFactory> textFactory;
 
 		void UpdateTextPosition()
 		{
